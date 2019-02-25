@@ -1,4 +1,4 @@
-clear
+clearvars -except Subject
 close all
 clc
 
@@ -8,11 +8,11 @@ clc
 %% Load
 
 % Indset navn på data
-load('2BOLDAndreas1.mat')
+% load('Sorteret_MRI_data_SubjectsOnly.mat')
 
 %% Information and show
 
-IOrg = Subject.Session.T2.left(:,:,2);
+IOrg = Subject(21).Session(1).T2(1).left(:,:,2);
 
 figure;
 subplot(3,3,1), imshow(IOrg,[])
@@ -82,8 +82,7 @@ subplot(3,3,9), imshow(BWfinal), title('cleared off small objects');
 B=strel('disk',5);
 
 BWfinal = imclose(imopen(BWfinal,B),B);
-B=strel('disk',6); 
-% Added an additional open to minimize the connected area around the tibia
+B=strel('disk',6);   %%HER
 BWfinal = imopen(BWfinal,B);
 figure; subplot(3,3,1), imshow(BWfinal,[])
 title('Open and Close image');
@@ -109,7 +108,7 @@ Iexport(BWfinal==0)=0;
 figure, subplot(3,3,1), imshow(Iexport,[])
 title('Open and Close image'); imshow(Iexport,[]), title('Eksported section');
 
-%% Now find the fibula
+%% Now find the bone
 
 Iexport(I < 500)=0;
 Iexport(I > 2000)=0;
@@ -122,11 +121,12 @@ title('Original image with intensity threshold');
 B=strel('disk',1);
 
 I = imclose(imopen(Iexport,B),B);
+
 subplot(3,3,3), imshow(I,[])
 title('Open and Close image');
 
-%% To binary
 level = graythresh(I);
+
 I = im2bw(I,level);
 subplot(3,3,4), imshow(I,[])
 title('Binary');
@@ -135,6 +135,7 @@ mask = zeros(size(I));
 mask(25:end-25,25:end-25) = 1;
 
 bw = activecontour(I,mask,300);
+
 subplot(3,3,5), imshow(bw), title('Segmented Image')
 
 %% Inverse
@@ -157,7 +158,6 @@ B=strel('disk',2);
 BWfinal = imdilate(BWdfill,B);
 
 %% Mark on original image
-
 BWoutline2 = bwperim(BWfinal);
 Segout(BWoutline2) = 3000; 
 figure, imshow(Segout,[]), title('outlined original image');
