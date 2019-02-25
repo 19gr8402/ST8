@@ -12,7 +12,7 @@ clc
 
 %% Information and show
 
-IOrg = Subject(2).Session(1).T2(1).left(:,:,2);
+IOrg = Subject(26).Session(1).T2(1).left(:,:,2);
 
 figure;
 subplot(3,3,1), imshow(IOrg,[])
@@ -23,7 +23,7 @@ title('Original image');
 
 I = IOrg;
 I(I < 500)=0;
-I(I > 2100)=0;
+I(I > 2200)=0;
 
 subplot(3,3,2), imshow(I,[])
 title('Original image with intensity threshold');
@@ -31,7 +31,7 @@ title('Original image with intensity threshold');
 %% Open and close
 % Done to smooth.
 
-B=strel('disk',7);
+B=strel('disk',4);
 
 I = imclose(imopen(I,B),B);
 subplot(3,3,3), imshow(I,[])
@@ -66,11 +66,6 @@ title('binary image with filled holes');
 BWnosmall = bwareaopen(BWdfill, 200);
 subplot(3,3,7), imshow(BWnosmall,[]), title('cleared off small objects');
 
-%% Dilate
-
-B=strel('disk',2);
-BWnosmall = imdilate(BWnosmall,B);
-
 %% Edge detection
 % Usign a sobel filter.
 
@@ -96,8 +91,8 @@ figure; subplot(3,3,1), imshow(BWs), title('subtract');
 %% Dilate the Image TILFØJELSE STOP
 % Dilate by two line (vertical and horizontal) with a size on 1.
 
-se90 = strel('line', 4, 90);
-se0 = strel('line', 4, 0);
+se90 = strel('line', 3, 90);
+se0 = strel('line', 3, 0);
 
 BWsdil = imdilate(imdilate(BWs, [se90 se0]), [se90 se0]);
 subplot(3,3,2), imshow(BWsdil), title('dilated gradient mask');
@@ -123,7 +118,7 @@ subplot(3,3,5), imshow(BWsmooth), title('segmented image');
 %% Remove too small objects
 
 BWfinal = bwareaopen(BWsmooth, 5000);
-subplot(3,3,6), imshow(BWfinal), title('cleared off small objects');
+subplot(3,3,9), imshow(BWfinal), title('cleared off small objects');
 
 %% Open and close
 
@@ -132,13 +127,13 @@ B=strel('disk',5);
 BWfinal = imclose(imopen(BWfinal,B),B);
 B=strel('disk',6);   %%HER
 BWfinal = imopen(BWfinal,B);
-subplot(3,3,7), imshow(BWfinal,[])
+figure; subplot(3,3,1), imshow(BWfinal,[])
 title('Open and Close image');
 
 %% Remove too small objects again
 
 BWfinal = bwareaopen(BWfinal, 5000);
-subplot(3,3,8), imshow(BWfinal,[])
+subplot(3,3,2), imshow(BWfinal,[])
 title('Remove too small objects again');
 
 %% Show outline
