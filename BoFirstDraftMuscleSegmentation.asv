@@ -7,11 +7,12 @@ clc
 
 %% Load
 
+% Indset navn på data
 load('2BOLDAndreas1.mat')
 
 %% Information and show
 
-IOrg = Subject.Session.T2.right(:,:,3);
+IOrg = Subject.Session.T2.left(:,:,2);
 
 figure;
 subplot(3,3,1), imshow(IOrg,[])
@@ -81,7 +82,8 @@ subplot(3,3,9), imshow(BWfinal), title('cleared off small objects');
 B=strel('disk',5);
 
 BWfinal = imclose(imopen(BWfinal,B),B);
-B=strel('disk',6);   %%HER
+B=strel('disk',6); 
+% Added an additional open to minimize the connected area around the tibia
 BWfinal = imopen(BWfinal,B);
 figure; subplot(3,3,1), imshow(BWfinal,[])
 title('Open and Close image');
