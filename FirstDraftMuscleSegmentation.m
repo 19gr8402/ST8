@@ -40,9 +40,9 @@ title('Open and Close image');
 %% Edge detection
 % Usign a sobel filter.
 
-[~, threshold] = edge(I, 'sobel');
+[~, threshold] = edge(I, 'canny'); % Brugte sobel før, men kan ikke rigtig se forskel.
 fudgeFactor = .5;
-BWs = edge(I,'sobel', threshold * fudgeFactor);
+BWs = edge(I,'canny', threshold * fudgeFactor);
 subplot(3,3,4), imshow(BWs), title('binary gradient mask');
 
 %% TILFØJELSE
@@ -213,4 +213,8 @@ figure, imshow(Segout,[]), title('outlined original image');
 %% Chop the original image
 
 Iexport(BWfinal==1)=0;
-%figure, imshow(Iexport,[]), title('Eksported section');
+figure, imshow(Iexport,[]), title('Eksported section');
+
+I2 = im2double(Iexport);
+pic_jpg=imresize(I2,0.5,'bilinear');
+imwrite(pic_jpg,'muscle.jpg','jpg')
