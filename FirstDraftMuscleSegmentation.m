@@ -218,3 +218,6 @@ figure, imshow(Iexport,[]), title('Eksported section');
 I2 = im2double(Iexport);
 pic_jpg=imresize(I2,0.5,'bilinear');
 imwrite(pic_jpg,'muscle.jpg','jpg')
+
+%% Her starter Mat
+mat_img = imadjust(Iexport);
