@@ -3,9 +3,9 @@
 clear
 close all
 %% Load and setup
-load('Sorteret_MRI_data_SubjectsOnly');
+load('C:\Users\mathi\Google Drive\ST8\MATLAB\Sorteret_MRI_data_SubjectsOnly.mat');
 
-antalSubjects = 2; %sættes i samråd med Ryan
+antalSubjects = 10; %sættes i samråd med Ryan
 manSegS_s1_r2 = cell(antalSubjects, 1);
 
 %% Løkke af manuelle segmenteringer
