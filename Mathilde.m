@@ -241,3 +241,22 @@ hold on
 himage = imshow(Lrgb);
 himage.AlphaData = 0.3;
 title('Colored Labels Superimposed Transparently on Original Image')
+
+
+%%
+subplot(3,3,1)
+imshow(manSegS_s1_r2{1,1})
+subplot(3,3,2)
+imshow(manSegS_s1_r2{2,1})
+subplot(3,3,3)
+imshow(manSegS_s1_r2{3,1})
+subplot(3,3,4)
+imshow(manSegS_s1_r2{4,1})
+subplot(3,3,5)
+imshow(manSegS_s1_r2{5,1})
+subplot(3,3,6)
+imshow(manSegS_s1_r2{6,1})
+subplot(3,3,7)
+imshow(manSegS_s1_r2{7,1})
+subplot(3,3,8)
+imshow(manSegS_s1_r2{8,1})
