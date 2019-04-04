@@ -84,6 +84,7 @@ e = std(y_plot)*ones(size(x_plot));
 fig = figure;
 errorbar(x_plot,y_plot,e)
 xlim([0 n+1])
+ylim([0.75 1])
 title('DICE similarity coefficient for the segmented area')
 ylabel('DICE')
 xlabel('Subject')

@@ -31,7 +31,7 @@ fasit = energyPhaseFunc(I);
 Ephase = uint8(255 * mat2gray((1-(( abs(imag(fasit)) - abs(real(fasit)) - T) ./ ( sqrt((abs(real(fasit)).^2) + (abs(imag(fasit)).^2)) + e ))) ./2));
 
 
-%Eedge = histeq(Eedge);
+Eedge = histeq(Eedge);
 % Eextrn = imcomplement(uint8(255 * mat2gray(Ephase-Eedge-Eterm)));
 Eextern = im2double(uint8(255 * mat2gray(Ephase-Eedge+Eterm)));
 
