@@ -1,0 +1,9 @@
+Altereret udgave af active contour koden. (Den med stjernen)
+
+Har lavet egen kode til ekstern energi billederne.
+
+Diverse ændringer i snakeSJ
+
+En cleanSnakeSJ der går gennem alle subjects. 
+
+Lavet en ekstra der er til optimering og andet leg på.

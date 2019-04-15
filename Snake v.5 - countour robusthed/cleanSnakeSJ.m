@@ -4,9 +4,8 @@
 close all
 clearvars -except Subject manSegS_s1_r2 P
 %% read, show and initial contour:
-antalSubjects = 1;
-finalgnsErr = 0;
-% for finalnPoints = 121:1:139
+antalSubjects = 31;
+
 for n=1:antalSubjects
     % Read an image
     I = Subject(n).Session(1).T2.right(:,:,2);
@@ -37,10 +36,9 @@ for n=1:antalSubjects
     finalMu = 0;                     % 0.2;
     finalIterations = 300;
     finalGIterations = 100;
-    finalnPoints = 126;
     
     % General Parameters
-    Options.nPoints = finalnPoints;
+    % Options.nPoints = finalnPoints;
     Options.Iterations = finalIterations;
     % Options.Gamma = finalGamma;
     
@@ -59,11 +57,13 @@ for n=1:antalSubjects
     Options.Mu = finalMu;             % Trade of between real edge vectors, and noise vectors, default 0.2. (Warning setting this to high >0.5 gives an instable Vector Flow)
     
     %% Do da snek
-    [O,J]=SnakeSJ(I,P{n},Options);
-    diceErr(n) = dice(manSeg,J);
+    for rep = 1:10
+        tempP = P{n}+(-10+(10+10)*rand(length(P{n}),2));
+    [O,J]=SnakeSJ(I,tempP,Options);
+    diceErr(n,rep) = dice(manSeg,J);
     
     % show results
-%% Show results
+    %%
     figure
     imshow(I)
     hold on
@@ -72,15 +72,16 @@ for n=1:antalSubjects
     B   = 1;
     RGB = cat(3, (J-J.*manSeg)+ (manSeg-J.*manSeg)+(J.*manSeg) * R, (J.*manSeg) * G, (J.*manSeg)* B);
     himage = imshow(RGB(:,:,:),[]);
-    himage.AlphaData = 0.1;
-    plot([P{n}(:,2);P{n}(1,2)],[P{n}(:,1);P{n}(1,1)]);
+    himage.AlphaData = 0.2;
+    plot([tempP(:,2);tempP(1,2)],[tempP(:,1);tempP(1,1)]);
     plot([O(:,2);O(1,2)],[O(:,1);O(1,1)],'.g');
     legend('Initial Contour', 'Snake Contour')
     title(sprintf('Segmentated Area Superimposed on Subject %d',n))
+    end
 end
 %% Show error
 x_plot = 1:n;
-y_plot = diceErr(x_plot);
+y_plot = diceErr(x_plot,:);
 e = std(y_plot)*ones(size(x_plot));
 
 fig = figure;
@@ -92,8 +93,3 @@ ylabel('DICE')
 xlabel('Subject')
 
 gnsErr = mean(diceErr);
-if gnsErr>finalgnsErr
-    nPoints = finalnPoints;
-    finalgnsErr = gnsErr;
-end
-%end

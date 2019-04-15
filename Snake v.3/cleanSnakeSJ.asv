@@ -4,8 +4,9 @@
 close all
 clearvars -except Subject manSegS_s1_r2 P
 %% read, show and initial contour:
-antalSubjects = 1;
-
+antalSubjects = 31;
+finalgnsErr = 0;
+% for finalnPoints = 121:1:139
 for n=1:antalSubjects
     % Read an image
     I = Subject(n).Session(1).T2.right(:,:,2);
@@ -24,7 +25,7 @@ for n=1:antalSubjects
     %% Set parameters
     % predetermined snake options
     Options = struct;
-    Options.Verbose = false; % show important images if true
+    Options.Verbose = true; % show important images if true
     
     % Default values
     finalDelta = 0.1;                % 0.1;
@@ -36,9 +37,10 @@ for n=1:antalSubjects
     finalMu = 0;                     % 0.2;
     finalIterations = 300;
     finalGIterations = 100;
+    finalnPoints = 126;
     
     % General Parameters
-    % Options.nPoints = finalnPoints;
+    Options.nPoints = finalnPoints;
     Options.Iterations = finalIterations;
     % Options.Gamma = finalGamma;
     
@@ -62,19 +64,19 @@ for n=1:antalSubjects
     
     % show results
     %%
-    figure
-    imshow(I)
-    hold on
-    R   = 1;  % Value in range [0, 1]
-    G   = 1;
-    B   = 1;
-    RGB = cat(3, (J-J.*manSeg)+ (manSeg-J.*manSeg) * R, (J.*manSeg) * G, m (J.*manSeg)* B);
-    himage = imshow(RGB(:,:,:),[]);
-    himage.AlphaData = 0.1;
-    plot([P{n}(:,2);P{n}(1,2)],[P{n}(:,1);P{n}(1,1)]);
-    plot([O(:,2);O(1,2)],[O(:,1);O(1,1)],'.g');
-    legend('Initial Contour', 'Snake Contour')
-    title(sprintf('Segmentated Area Superimposed on Subject %d',n))
+%     figure
+%     imshow(I)
+%     hold on
+%     R   = 1;  % Value in range [0, 1]
+%     G   = 1;
+%     B   = 1;
+%     RGB = cat(3, (J-J.*manSeg)+ (manSeg-J.*manSeg)+(J.*manSeg) * R, (J.*manSeg) * G, (J.*manSeg)* B);
+%     himage = imshow(RGB(:,:,:),[]);
+%     himage.AlphaData = 0.1;
+%     plot([P{n}(:,2);P{n}(1,2)],[P{n}(:,1);P{n}(1,1)]);
+%     plot([O(:,2);O(1,2)],[O(:,1);O(1,1)],'.g');
+%     legend('Initial Contour', 'Snake Contour')
+%     title(sprintf('Segmentated Area Superimposed on Subject %d',n))
 end
 %% Show error
 x_plot = 1:n;
@@ -90,3 +92,8 @@ ylabel('DICE')
 xlabel('Subject')
 
 gnsErr = mean(diceErr);
+if gnsErr>finalgnsErr
+    nPoints = finalnPoints;
+    finalgnsErr = gnsErr;
+end
+%end
