@@ -19,7 +19,7 @@ Options.Wline=0.01;
 Options.Wterm=0.8;
 Options.Sigma1=0.8;
 
-%% ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤     External energy image    ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
+%% ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤    External energy image    ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
 
 I = ExternalForceImage2D(IOrg,Options.Wline, Options.Wedge, Options.Wterm,Options.Sigma1);
 if showMethod == true
