@@ -25,7 +25,7 @@ options.originalsearch=false;
 compartments = 5;
 load('TrainingData');
 
-IProcessedImage = ExternalForceImage(double(I));
+IProcessedImage = ExternalForceImage(double(mat2gray(I)));
 
 % Initial position offset and rotation, of the initial/mean contour
 tform.offsetr = 0.5; tform.offsetv=[-256 -256]; tform.offsets=0;
@@ -34,18 +34,6 @@ pos=ASM_align_data_inverse2D(pos,tform);
 
 % Apply the ASM model onm the test image
 Isegmented=ASM_ApplyModel2D(I,IProcessedImage,tform,ShapeData,AppearanceData,options,TrainingDataLines,compartments);
-
-if (options.testverbose)
-IsegmentedLarge = Isegmented(1).Seg;
-    for k=2:testCompartments
-    IsegmentedLarge = logical(IsegmentedLarge+Isegmented(k).Seg);
-    end
-Itest(idx).Isegmented = IsegmentedLarge;
-Outline = bwperim(Itest(idx).Isegmented);
-Segout = Itest(idx).OrgImage;
-Segout(Outline) = 1;
-figure, imshow(Segout,[]); hold on;
-end
 
 end
 
