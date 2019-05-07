@@ -91,7 +91,7 @@ for i=1:450
     BOLDsequence(compartment).Seg(i,:)=mean(bold_temp);%mean(bold_temp(:));
     
 end    
-    BOLDsequence(compartment).Seg = normalize(BOLDsequence(compartment).Seg,'range');
+    BOLDsequence(compartment).Seg = normalize(BOLDsequence(compartment).Seg,'range')
 end
 
 

@@ -38,7 +38,7 @@ figure; imshow(Segout,[]); title('GT');
 
 %% Image registration
 
-echoPlanarImages = double(mat2gray(Subject(i).Session(1).BOLD.right(:,:,:)));
+echoPlanarImages = double(mat2gray(Subject(i).Session(1).BOLD.left(:,:,:)));
 
 [BOLDsequenceGT]=Image_registration_and_BOLD(I,echoPlanarImages,ISegmentedGT,showMethod);
 

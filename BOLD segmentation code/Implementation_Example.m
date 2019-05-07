@@ -10,7 +10,7 @@ tic;
 showMethod = true;
 
 %% ASM segmentation
-for i=2:2
+for i=1:1
 I=Subject(i).Session(1).T2.right(:,:,2);
 
 ISegmented = ASM_Segmentation_BOLD(I);
@@ -25,7 +25,7 @@ figure; imshow(Segout,[]);
 
 %% Image registration
 
-echoPlanarImages = double(mat2gray(Subject(i).Session(1).BOLD.right(:,:,:)));
+echoPlanarImages = Subject(i).Session(1).BOLD.right(:,:,:);
 
 [BOLDsequence]=Image_registration_and_BOLD(I,echoPlanarImages,ISegmented,showMethod);
 

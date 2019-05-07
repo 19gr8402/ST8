@@ -13,18 +13,17 @@ tic;
 showMethod = true;
 
 %% ASM segmentation
-for i=1:1
+for i=3:3
+I=flip(Subject(i).Session(1).T2.left(:,:,2),2);    
     
-    
-I=flip(Subject(i).Session(1).T2.left(:,:,2),2);
-ISegmented = ASM_Segmentation_BOLD(I);
-% Plot
-Segout = mat2gray(I);
-for k=1:5
-Outline = bwperim(ISegmented(k).Seg);
-Segout(Outline) = 1;
-end
-figure; imshow(Segout,[]); title('ASM');
+% ISegmented = ASM_Segmentation_BOLD(I);
+% % Plot
+% Segout = mat2gray(I);
+% for k=1:5
+% Outline = bwperim(ISegmented(k).Seg);
+% Segout(Outline) = 1;
+% end
+% figure; imshow(Segout,[]); title('ASM');
 
 %% Our ground truth
 
@@ -38,7 +37,7 @@ figure; imshow(Segout,[]); title('GT');
 
 %% Image registration
 
-echoPlanarImages = double(mat2gray(Subject(i).Session(1).BOLD.right(:,:,:)));
+echoPlanarImages = Subject(i).Session(1).BOLD.right(:,:,:);
 
 [BOLDsequenceGT]=Image_registration_and_BOLD(I,echoPlanarImages,ISegmentedGT,showMethod);
 
@@ -92,36 +91,49 @@ figure; imshow(Segout,[]); title('ASM ER10');
 
 [BOLDsequenceER10]=Image_registration_and_BOLD(I,echoPlanarImages,ISegmentedER10,showMethod);
 
+% %% Plot
+% figure; subplot(2,3,1); plot(BOLDsequenceGT(1).Seg,'k'); title('Anterior: BOLD');
+% hold on; plot(BOLDsequence(1).Seg,'g');
+% hold on; plot(BOLDsequenceER2(1).Seg,'b');
+% hold on; plot(BOLDsequenceER5(1).Seg,'y');
+% hold on; plot(BOLDsequenceER10(1).Seg,'r'); legend('GT','ASM','ASM ER2','ASM ER4','ASM ER6','ASM ER8','ASM ER10');
+% 
+% subplot(2,3,2); plot(BOLDsequenceGT(2).Seg,'k'); title('Lateral: BOLD');
+% hold on; plot(BOLDsequence(2).Seg,'g');
+% hold on; plot(BOLDsequenceER2(2).Seg,'b');
+% hold on; plot(BOLDsequenceER5(2).Seg,'y');
+% hold on; plot(BOLDsequenceER10(2).Seg,'r'); legend('GT','ASM','ASM ER2','ASM ER4','ASM ER6','ASM ER8','ASM ER10');
+% 
+% subplot(2,3,3); plot(BOLDsequenceGT(3).Seg,'k'); title('Deep: BOLD');
+% hold on; plot(BOLDsequence(3).Seg,'g');
+% hold on; plot(BOLDsequenceER2(3).Seg,'b');
+% hold on; plot(BOLDsequenceER5(3).Seg,'y');
+% hold on; plot(BOLDsequenceER10(3).Seg,'r'); legend('GT','ASM','ASM ER2','ASM ER4','ASM ER6','ASM ER8','ASM ER10');
+% 
+% subplot(2,3,4); plot(BOLDsequenceGT(4).Seg,'k'); title('Soleus: BOLD');
+% hold on; plot(BOLDsequence(4).Seg,'g');
+% hold on; plot(BOLDsequenceER2(4).Seg,'b');
+% hold on; plot(BOLDsequenceER5(4).Seg,'y');
+% hold on; plot(BOLDsequenceER10(4).Seg,'r'); legend('GT','ASM','ASM ER2','ASM ER4','ASM ER6','ASM ER8','ASM ER10');
+% 
+% subplot(2,3,5); plot(BOLDsequenceGT(5).Seg,'k'); title('Lateral head of Gatrocnemius: BOLD');
+% hold on; plot(BOLDsequence(5).Seg,'g');
+% hold on; plot(BOLDsequenceER2(5).Seg,'b');
+% hold on; plot(BOLDsequenceER5(5).Seg,'y');
+% hold on; plot(BOLDsequenceER10(5).Seg,'r'); legend('GT','ASM','ASM ER2','ASM ER4','ASM ER6','ASM ER8','ASM ER10');
+
 %% Plot
-figure; subplot(2,3,1); plot(BOLDsequenceGT(1).Seg,'k'); title('Anterior: BOLD');
+figure; subplot(2,1,1); plot(BOLDsequenceGT(1).Seg,'k'); title('Anterior: BOLD');
 hold on; plot(BOLDsequence(1).Seg,'g');
 hold on; plot(BOLDsequenceER2(1).Seg,'b');
 hold on; plot(BOLDsequenceER5(1).Seg,'y');
 hold on; plot(BOLDsequenceER10(1).Seg,'r'); legend('GT','ASM','ASM ER2','ASM ER5','ASM ER10');
 
-subplot(2,3,2); plot(BOLDsequenceGT(2).Seg,'k'); title('Lateral: BOLD');
-hold on; plot(BOLDsequence(2).Seg,'g');
-hold on; plot(BOLDsequenceER2(2).Seg,'b');
-hold on; plot(BOLDsequenceER5(2).Seg,'y');
-hold on; plot(BOLDsequenceER10(2).Seg,'r'); legend('GT','ASM','ASM ER2','ASM ER5','ASM ER10');
-
-subplot(2,3,3); plot(BOLDsequenceGT(3).Seg,'k'); title('Deep: BOLD');
-hold on; plot(BOLDsequence(3).Seg,'g');
-hold on; plot(BOLDsequenceER2(3).Seg,'b');
-hold on; plot(BOLDsequenceER5(3).Seg,'y');
-hold on; plot(BOLDsequenceER10(3).Seg,'r'); legend('GT','ASM','ASM ER2','ASM ER4','ASM ER6','ASM ER8','ASM ER10');
-
-subplot(2,3,4); plot(BOLDsequenceGT(4).Seg,'k'); title('Soleus: BOLD');
-hold on; plot(BOLDsequence(4).Seg,'g');
-hold on; plot(BOLDsequenceER2(4).Seg,'b');
-hold on; plot(BOLDsequenceER5(4).Seg,'y');
-hold on; plot(BOLDsequenceER10(4).Seg,'r'); legend('GT','ASM','ASM ER2','ASM ER4','ASM ER6','ASM ER8','ASM ER10');
-
-subplot(2,3,5); plot(BOLDsequenceGT(5).Seg,'k'); title('Lateral head of Gatrocnemius: BOLD');
+subplot(2,1,2); plot(BOLDsequenceGT(5).Seg,'k'); title('Medial head of Gatrocnemius: BOLD');
 hold on; plot(BOLDsequence(5).Seg,'g');
 hold on; plot(BOLDsequenceER2(5).Seg,'b');
 hold on; plot(BOLDsequenceER5(5).Seg,'y');
-hold on; plot(BOLDsequenceER10(5).Seg,'r'); legend('GT','ASM','ASM ER2','ASM ER4','ASM ER6','ASM ER8','ASM ER10');
+hold on; plot(BOLDsequenceER10(5).Seg,'r'); legend('GT','ASM','ASM ER2','ASM ER5','ASM ER10');
 
 time = toc;
 end
