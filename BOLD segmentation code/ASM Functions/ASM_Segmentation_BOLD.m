@@ -1,4 +1,4 @@
-function [Isegmented]=ASM_Segmentation_BOLD(I)
+function [Isegmented]=ASM_Segmentation_BOLD(I,AppearanceData,ShapeData,TrainingDataLines)
     
 %% Set options
 % Number of contour points interpolated between the major landmarks.
@@ -23,10 +23,10 @@ options.originalsearch=false;
 %% Test the ASM model %%
 
 compartments = 5;
-load('TrainingData');
+%load('TrainingData');
 
-IProcessedImage = ExternalForceImage(double(mat2gray(I)));
-
+%IProcessedImage = ExternalForceImage(double(mat2gray(I)));
+IProcessedImage = ExternalForceImage(double(I));
 % Initial position offset and rotation, of the initial/mean contour
 tform.offsetr = 0.5; tform.offsetv=[-256 -256]; tform.offsets=0;
 pos=[ShapeData.x_mean(1:end/2) ShapeData.x_mean(end/2+1:end)];

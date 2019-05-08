@@ -33,5 +33,5 @@ Ephase = uint8(255 * mat2gray((1-(( abs(imag(fasit)) - abs(real(fasit)) - T) ./ 
 
 Eedge = histeq(Eedge);
 % Eextrn = imcomplement(uint8(255 * mat2gray(Ephase-Eedge-Eterm)));
-Eextern = im2double(uint8(255 * mat2gray(Ephase-Eedge+Eterm)));
+Eextern = im2double(uint8(255 * mat2gray(double(Ephase)-double(Eedge)+double(Eterm))));
 
