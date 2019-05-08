@@ -1,8 +1,6 @@
 function [Isegmented]=ASM_Segmentation_BOLD(I,AppearanceData,ShapeData,TrainingDataLines)
     
 %% Set options
-% Number of contour points interpolated between the major landmarks.
-options.ni=30;
 % Length of landmark intensity profile
 options.k = 15;
 % Search length (in pixels) for optimal contourpoint position, 

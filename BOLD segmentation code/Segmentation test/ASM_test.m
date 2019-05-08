@@ -1,7 +1,7 @@
 clearvars -except Subject; clc; close all;
 
 %% Load data
-%load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
+load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
 % load('C:\Users\mathi\Google Drive\ST8\MATLAB\Sorteret_MRI_data_SubjectsOnly.mat')
 load('manSegS_s1_r2_6comp_Ground_Truth');
 
@@ -9,23 +9,23 @@ load('manSegS_s1_r2_6comp_Ground_Truth');
 % Number of contour points interpolated between the major landmarks.
 options.ni=30;   %30
 % Length of landmark intensity profile
-options.k = 15;  %15
+options.k = 15;
 % Search length (in pixels) for optimal contourpoint position, 
 % in both normal directions of the contourpoint.
-options.ns=1;  %  1     %10
+options.ns=1;
 % Number of image resolution scales
-options.nscales=7;  % 3,7    %1
+options.nscales=7;
 % Set normal contour, limit to +- m*sqrt( eigenvalue )
-options.m=2;   % 2
+options.m=2;
 % Number of search itterations
 options.nsearch=150;  %150
-% If verbose is true all debug images will be shown.
-options.verbose=false;
 % If testverbose is true all test images will be shown.
 options.testverbose=false;
 % The original minimal Mahanobis distance using edge gradient (true)
 % or new minimal PCA parameters using the intensities. (false)
 options.originalsearch=false;  
+% If verbose is true all debug images will be shown.
+options.verbose=false;
 
 %% Load training data
 % First Load the Hand Training DataSets (Contour and Image)
@@ -63,7 +63,7 @@ for i=1:31
     i
 end
 
-figure; imshow(I);
+%figure; imshow(I);
 %% Shape Model %%
 % Make the Shape model, which finds the variations between contours
 % in the training data sets. And makes a PCA model describing normal
@@ -101,21 +101,21 @@ number = num2str(i);
 ISegmented = ASM_Segmentation_BOLD(I,AppearanceData,ShapeData,TrainingDataLines);
 
 % Plot ASM segmentation
-Segout = mat2gray(I);
-for k=1:5
-Outline = bwperim(ISegmented(k).Seg);
-Segout(Outline) = 1;
-end
-figure; imshow(Segout,[]); title(['ASM: Subject ', number,]);
-
-%Plot ground truth segmentation
-ISegmentedGT = manSegGroundTruth(i).Subject(1:5);
-Segout = mat2gray(I);
-    for k=1:5
-    Outline = bwperim(ISegmentedGT(k).Seg);
-    Segout(Outline) = 1;
-    end
-figure; imshow(Segout,[]); title(['GT: Subject ', number,]);
+% Segout = mat2gray(I);
+% for k=1:5
+% Outline = bwperim(ISegmented(k).Seg);
+% Segout(Outline) = 1;
+% end
+% figure; imshow(Segout,[]); title(['ASM: Subject ', number,]);
+% 
+% %Plot ground truth segmentation
+% ISegmentedGT = manSegGroundTruth(i).Subject(1:5);
+% Segout = mat2gray(I);
+%     for k=1:5
+%     Outline = bwperim(ISegmentedGT(k).Seg);
+%     Segout(Outline) = 1;
+%     end
+% figure; imshow(Segout,[]); title(['GT: Subject ', number,]);
 
 %% Calculate dice
     for k=1:testCompartments
