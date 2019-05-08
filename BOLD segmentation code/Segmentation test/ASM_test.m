@@ -1,7 +1,7 @@
 clearvars -except Subject; clc; close all;
 
 %% Load data
-load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
+%load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
 % load('C:\Users\mathi\Google Drive\ST8\MATLAB\Sorteret_MRI_data_SubjectsOnly.mat')
 load('manSegS_s1_r2_6comp_Ground_Truth');
 
@@ -36,10 +36,13 @@ options.verbose=false;
 compartments = 10;
 load('31trainSubject10comp');
 
-for run=1:1
+%for run=5:5:25
 
+%A = randperm(31,run);
+    
 TrainingData=struct;
 for i=1:31
+    %a = A(1,i);
     I = ExternalForceImage(double(Subject(i).Session(1).T2.right(:,:,2))); %double(mat2gray(mat2gray(
 
     if(options.verbose); figure; imshow(Subject(i).Session(1).T2.right(:,:,2),[]); hold on; end
@@ -99,7 +102,7 @@ I=flip(Subject(i).Session(1).T2.left(:,:,2),2);
 number = num2str(i);
 
 ISegmented = ASM_Segmentation_BOLD(I,AppearanceData,ShapeData,TrainingDataLines);
-
+Segmentation(i).Subject=ISegmented;
 % Plot ASM segmentation
 % Segout = mat2gray(I);
 % for k=1:5
@@ -119,9 +122,9 @@ ISegmented = ASM_Segmentation_BOLD(I,AppearanceData,ShapeData,TrainingDataLines)
 
 %% Calculate dice
     for k=1:testCompartments
-    diceErr(run).run(k,i) = dice(manSegGroundTruth(i).Subject(k).Seg,ISegmented(k).Seg);
+    diceErr(run/5).run(k,i) = dice(manSegGroundTruth(i).Subject(k).Seg,ISegmented(k).Seg);
     end
 i
 end
 
-end
+%end
