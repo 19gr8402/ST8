@@ -1,7 +1,7 @@
 clearvars -except Subject; clc; close all;
 
 %% Load data
-%load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
+load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
 % load('C:\Users\mathi\Google Drive\ST8\MATLAB\Sorteret_MRI_data_SubjectsOnly.mat')
 load('manSegS_s1_r2_6comp_Ground_Truth');
 
@@ -122,7 +122,7 @@ Segmentation(i).Subject=ISegmented;
 
 %% Calculate dice
     for k=1:testCompartments
-    diceErr(run/5).run(k,i) = dice(manSegGroundTruth(i).Subject(k).Seg,ISegmented(k).Seg);
+    diceErr(1).run(k,i) = dice(manSegGroundTruth(i).Subject(k).Seg,ISegmented(k).Seg);
     end
 i
 end
