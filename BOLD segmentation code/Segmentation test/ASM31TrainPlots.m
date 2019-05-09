@@ -76,6 +76,7 @@ xlim([0 32]);
 %% Represent best (23) and worst (29) case.
 
 %load('C:\Users\Bo\Documents\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat');
+%load('D:\MATLAB\2. semester kandidat\Project\Data\Sorteret_MRI_data_SubjectsOnly.mat');
 %load('Segmentation31Train');
 
 IBest = flip(Subject(23).Session(1).T2.left(:,:,2),2);
