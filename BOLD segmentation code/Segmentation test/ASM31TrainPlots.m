@@ -1,39 +1,52 @@
 clearvars -except Subject; close all; clc;
 
 %% Load 
-load('diceErrAll_testTrainSubjects');
+load('diceErrAll_testTrainSubjects_All_rounds');
 
 %% Boksplot
 
-CharCompartmentTemp = ['Anterior     ';'Lateral      ';'Deep         '; 'Soleus       ';'Gastrocnemius'];
+CharCompartmentTemp = ['Anterior      ';'Lateral       ';'Deep posterior'; 'Soleus        ';'Gastrocnemius '];
 CharCompartment = CharCompartmentTemp;
 for i=1:30
 CharCompartment = [CharCompartment; CharCompartmentTemp];
 end
 
-diceData31 = diceErr(6).run(:);
+diceData31 = diceRound(1).round(6).run(:);
 
 %% Boxplot
 boxplot(diceData31,CharCompartment)
 ylim([0 1]);
 title('Boxplot 31 train subjects')
-xlabel('Compartment')
 ylabel('Dice')
 
 
 %% Calculate and add mean
+for round=1:5
 for i=1:6
-diceErr(i).run(6,:) = mean(diceErr(i).run);
+%diceErr(i).run(6,:) = mean(diceErr(i).run);
+diceRound(round).round(i).run(6,:) = mean(diceRound(round).round(i).run);
+end
 end
 
 %% Plot training graph
 
-Anterior = [mean(diceErr(1).run(1,:)) mean(diceErr(2).run(1,:)) mean(diceErr(3).run(1,:)) mean(diceErr(4).run(1,:)) mean(diceErr(5).run(1,:)) mean(diceErr(6).run(1,:))];
-Lateral = [mean(diceErr(1).run(2,:)) mean(diceErr(2).run(2,:)) mean(diceErr(3).run(2,:)) mean(diceErr(4).run(2,:)) mean(diceErr(5).run(2,:)) mean(diceErr(6).run(2,:))];
-Deep = [mean(diceErr(1).run(3,:)) mean(diceErr(2).run(3,:)) mean(diceErr(3).run(3,:)) mean(diceErr(4).run(3,:)) mean(diceErr(5).run(3,:)) mean(diceErr(6).run(3,:))];
-Soleus = [mean(diceErr(1).run(4,:)) mean(diceErr(2).run(4,:)) mean(diceErr(3).run(4,:)) mean(diceErr(4).run(4,:)) mean(diceErr(5).run(4,:)) mean(diceErr(6).run(4,:))];
-Gastrocnemius = [mean(diceErr(1).run(5,:)) mean(diceErr(2).run(5,:)) mean(diceErr(3).run(5,:)) mean(diceErr(4).run(5,:)) mean(diceErr(5).run(5,:)) mean(diceErr(6).run(5,:))];
-Average = [mean(diceErr(1).run(6,:)) mean(diceErr(2).run(6,:)) mean(diceErr(3).run(6,:)) mean(diceErr(4).run(6,:)) mean(diceErr(5).run(6,:)) mean(diceErr(6).run(6,:))];
+Anterior = []; Lateral = []; Deep = []; Soleus = []; Gastrocnemius = []; Average = [];
+for run = 1:6
+for round = 1:5 
+   temp1(round,:) = mean(diceRound(round).round(run).run(1,:));
+   temp2(round,:) = mean(diceRound(round).round(run).run(2,:));
+   temp3(round,:) = mean(diceRound(round).round(run).run(3,:));
+   temp4(round,:) = mean(diceRound(round).round(run).run(4,:));
+   temp5(round,:) = mean(diceRound(round).round(run).run(5,:));
+   temp6(round,:) = mean(diceRound(round).round(run).run(6,:));
+end
+Anterior = [Anterior mean(temp1)];
+Lateral = [Lateral mean(temp2)];
+Deep = [Deep mean(temp3)];
+Soleus = [Soleus mean(temp4)];
+Gastrocnemius = [Gastrocnemius mean(temp5)];
+Average = [Average mean(temp6)];
+end
 
 x = [5 10 15 20 25 31];
 figure; plot(x,Anterior); hold on
@@ -42,25 +55,29 @@ plot(x,Deep); hold on
 plot(x,Soleus); hold on
 plot(x,Gastrocnemius); hold on
 plot(x,Average);
-legend('Anterior','Lateral','Deep','Soleus','Gastrocnemius','Average');
+legend('Anterior','Lateral','Deep posterior','Soleus','Gastrocnemius','Average');
 xlim([0 35]);
 ylim([0 1]);
 xticks([5 10 15 20 25 30])
 
 %% Find max
 
-diceErr(6).run(7,:) = max(diceErr(6).run(1:5,:));
+for i=1:6
+diceRound(1).round(6).run(7,:) = max(diceRound(1).round(6).run(1:5,:));
+end
 
 %% Find min
 
-diceErr(6).run(8,:) = min(diceErr(6).run(1:5,:));
+for i=1:6
+diceRound(1).round(6).run(8,:) = min(diceRound(1).round(6).run(1:5,:));
+end
 
 %% Plot mean performance
 figure;
 x = 1:1:31;
-y = diceErr(6).run(6,:);
-ypos = diceErr(6).run(7,:)-diceErr(6).run(6,:);
-yneg = -(diceErr(6).run(8,:)-diceErr(6).run(6,:));
+y = diceRound(1).round(6).run(6,:);
+ypos = diceRound(1).round(6).run(7,:)-diceRound(1).round(6).run(6,:);
+yneg = -(diceRound(1).round(6).run(8,:)-diceRound(1).round(6).run(6,:));
 errorbar(x,y,yneg,ypos,'x','MarkerSize',10)
 title('Errorbar 31 train subjects')
 xlabel('Subject')
@@ -79,7 +96,7 @@ xlim([0 32]);
 %diceErr(6).run(:,32)= std(diceErr(6).run,0,2);
 
 %% Represent best (23) and worst (29) case.
-
+%load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
 %load('C:\Users\Bo\Documents\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat');
 load('segmentation31TrainSubjects');
 load('manSegS_s1_r2_6comp_Ground_Truth');
@@ -158,7 +175,7 @@ hold on
 scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.6350    0.0780    0.1840])
 axis([x0 y0])
 % add the legend 
-legend('Anterior','Lateral','Deep','Soleus','Grastrocnemius')
+legend('Anterior','Lateral','Deep posterior','Soleus','Grastrocnemius')
 axis off %hide axis
 hold off
 
@@ -237,7 +254,7 @@ hold on
 scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.6350    0.0780    0.1840])
 axis([x0 y0])
 % add the legend 
-legend('Anterior','Lateral','Deep','Soleus','Grastrocnemius')
+legend('Anterior','Lateral','Deep posterior','Soleus','Grastrocnemius')
 axis off %hide axis
 hold off
 
