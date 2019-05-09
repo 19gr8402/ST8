@@ -101,10 +101,10 @@ xlim([0 32]);
 load('segmentation31TrainSubjects');
 load('manSegS_s1_r2_6comp_Ground_Truth');
 
-chosenImage = 23;
+chosenImage = 1;
 IBest = flip(Subject(chosenImage).Session(1).T2.left(:,:,2),2);
 figure; imshow(IBest,[], 'InitialMag', 'fit');
-title('Segmentation with higest mean dice'); hold on
+%title('Segmentation with higest mean dice'); hold on
 
 % Anterior
 se = strel('disk', 1);
@@ -163,21 +163,21 @@ set(i, 'AlphaData', manSeg)
 set(j, 'AlphaData', ASMSeg)
 x0 = get(gca,'xlim') ;
 y0 = get(gca,'ylim') ;
-hold on
-scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0    0.4470    0.7410])
-hold on
-scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.8500    0.3250    0.0980])
-hold on
-scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.9290    0.6940    0.1250])
-hold on
-scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.4660    0.6740    0.1880])
-hold on
-scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.6350    0.0780    0.1840])
-axis([x0 y0])
-% add the legend 
-legend('Anterior','Lateral','Deep posterior','Soleus','Grastrocnemius')
-axis off %hide axis
-hold off
+% hold on
+% scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0    0.4470    0.7410])
+% hold on
+% scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.8500    0.3250    0.0980])
+% hold on
+% scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.9290    0.6940    0.1250])
+% hold on
+% scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.4660    0.6740    0.1880])
+% hold on
+% scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.6350    0.0780    0.1840])
+% axis([x0 y0])
+% % add the legend 
+% legend('Anterior','Lateral','Deep posterior','Soleus','Grastrocnemius')
+% axis off %hide axis
+% hold off
 
 %% ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ next plot ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
 chosenImage = 29;
@@ -359,4 +359,11 @@ set(gca,'ztick',[1:5],'zticklabel',names)
 %zticks([450 449 '...' 2 1])
 zlabel('Frames')
 
-    
+%% ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ BOLD plot ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
+
+load('BOLDplotSubject_3');
+figure; plot(BOLDplot,'b');
+set(gca,'fontsize', 16);
+xlabel('Frames');
+ylabel('Signal intensity');
+xlim([0 450]);

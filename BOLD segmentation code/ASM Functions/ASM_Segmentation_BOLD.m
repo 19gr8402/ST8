@@ -1,4 +1,4 @@
-function [Isegmented]=ASM_Segmentation_BOLD(I,AppearanceData,ShapeData,TrainingDataLines)
+function [Isegmented]=ASM_Segmentation_BOLD(I)%,AppearanceData,ShapeData,TrainingDataLines)
     
 %% Set options
 % Length of landmark intensity profile
@@ -21,7 +21,7 @@ options.originalsearch=false;
 %% Test the ASM model %%
 
 compartments = 5;
-%load('TrainingData');
+load('TrainingDataASMfinal');
 
 %IProcessedImage = ExternalForceImage(double(mat2gray(I)));
 IProcessedImage = ExternalForceImage(double(I));

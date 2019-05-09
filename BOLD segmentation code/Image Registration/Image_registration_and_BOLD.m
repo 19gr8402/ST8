@@ -37,11 +37,11 @@ antalSubjects = 1;
     fixed = I;
     
     %Estimering af transformationen m. Mutual Information (optimering)
-    bold(:,:,1) = imresize(echoPlanarImages(:,:,1),8, 'nearest');
+    bold(:,:,1) = imresize(echoPlanarImages(:,:,5),8, 'nearest');
     tform = imregtform(bold(:,:,1),fixed,'affine',optimizer,metric,'PyramidLevels',pyramidLevels); %affine
     
     %Registrering vha. den estimerede transformation indtil billede 24.
-    for i=1:450 %24
+    for i=6:450 %24
          bold(:,:,i) = imresize(echoPlanarImages(:,:,i),8, 'nearest');
          bold_reg(:,:,i) = imwarp(bold(:,:,i),tform,'OutputView',imref2d(size(fixed)));
          %bold_reg(:,:,i) = imregister(bold(:,:,i),fixed,'affine',optimizer,metric,'PyramidLevels',pyramidLevels);
@@ -83,12 +83,12 @@ antalSubjects = 1;
 % end
 
 for compartment = 1:size(ISegmented,2)
-for i=1:450
+for i=5:450
     bold_temp = bold_reg(:,:,i);
     bold_temp(~ISegmented(compartment).Seg)=0;
     bold_temp = bold_temp(:);
     bold_temp = bold_temp(bold_temp>0);
-    BOLDsequence(compartment).Seg(i,:)=mean(bold_temp);%mean(bold_temp(:));
+    BOLDsequence(compartment).Seg(i-4,:)=mean(bold_temp);%mean(bold_temp(:));
     
 end    
     BOLDsequence(compartment).Seg = normalize(BOLDsequence(compartment).Seg,'range');
