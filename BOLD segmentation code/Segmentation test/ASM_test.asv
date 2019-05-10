@@ -20,7 +20,7 @@ options.m=2;
 % Number of search itterations
 options.nsearch=150;  %150
 % If testverbose is true all test images will be shown.
-options.testverbose=false;
+options.testverbose=true;
 % The original minimal Mahanobis distance using edge gradient (true)
 % or new minimal PCA parameters using the intensities. (false)
 options.originalsearch=false;  
@@ -41,9 +41,10 @@ load('31trainSubject10comp');
 %A = randperm(31,run);
     
 TrainingData=struct;
-for i=1:31%31
+for i=1:2%31
     %a = A(1,i);
-    I = ExternalForceImage(double(Subject(i).Session(1).T2.right(:,:,2))); %double(mat2gray(mat2gray(
+    %I = ExternalForceImage(double(Subject(i).Session(1).T2.right(:,:,2))); %double(mat2gray(mat2gray(
+    I = edge(Subject(i).Session(1).T2.right(:,:,2),'canny');
     
     if(options.verbose); figure; imshow(Subject(i).Session(1).T2.right(:,:,2),[]); hold on; end
     for k=1:compartments
@@ -97,7 +98,7 @@ AppearanceData = ASM_MakeAppearanceModel2D(TrainingData,options);
 
 TrainingDataLines = TrainingData.LinesComp;
 testCompartments = 5;
-for i=1:3 % Number of subject test images
+for i=1:2 % Number of subject test images
 I=flip(Subject(i).Session(1).T2.left(:,:,2),2);
 number = num2str(i);
 

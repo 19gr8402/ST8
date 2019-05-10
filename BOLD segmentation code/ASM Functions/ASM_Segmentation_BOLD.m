@@ -13,7 +13,7 @@ options.m=2;
 % Number of search itterations
 options.nsearch=150;  %150
 % If testverbose is true all test images will be shown.
-options.testverbose=false;
+options.testverbose=true;
 % The original minimal Mahanobis distance using edge gradient (true)
 % or new minimal PCA parameters using the intensities. (false)
 options.originalsearch=false;  
@@ -23,8 +23,8 @@ options.originalsearch=false;
 compartments = 5;
 load('TrainingDataASMfinal');
 
-%IProcessedImage = ExternalForceImage(double(mat2gray(I)));
 IProcessedImage = ExternalForceImage(double(I));
+
 % Initial position offset and rotation, of the initial/mean contour
 tform.offsetr = 0.5; tform.offsetv=[-256 -256]; tform.offsets=0;
 pos=[ShapeData.x_mean(1:end/2) ShapeData.x_mean(end/2+1:end)];
