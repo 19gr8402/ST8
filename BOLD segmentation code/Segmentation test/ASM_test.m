@@ -36,18 +36,18 @@ options.verbose=false;
 compartments = 10;
 load('31trainSubject10comp');
 
-for run=5:5:25
+%for run=5:5:25
 
-A = randperm(31,run);
+%A = randperm(31,run);
     
 TrainingData=struct;
-for i=1:run%31
-    a = A(1,i);
-    I = ExternalForceImage(double(Subject(a).Session(1).T2.right(:,:,2))); %double(mat2gray(mat2gray(
-
-    if(options.verbose); figure; imshow(Subject(a).Session(1).T2.right(:,:,2),[]); hold on; end
+for i=1:31%31
+    %a = A(1,i);
+    I = ExternalForceImage(double(Subject(i).Session(1).T2.right(:,:,2))); %double(mat2gray(mat2gray(
+    
+    if(options.verbose); figure; imshow(Subject(i).Session(1).T2.right(:,:,2),[]); hold on; end
     for k=1:compartments
-    p = trainSubject(a).p(k);
+    p = trainSubject(i).p(k);
     
     [Vertices,Lines,I]=LoadDataSetNiceContour(I,p,options.ni,options.verbose);
     TrainingData(i).VerticesComp(k).c = Vertices;
@@ -97,7 +97,7 @@ AppearanceData = ASM_MakeAppearanceModel2D(TrainingData,options);
 
 TrainingDataLines = TrainingData.LinesComp;
 testCompartments = 5;
-for i=1:31 % Number of subject test images
+for i=1:3 % Number of subject test images
 I=flip(Subject(i).Session(1).T2.left(:,:,2),2);
 number = num2str(i);
 
@@ -122,9 +122,9 @@ Segmentation(i).Subject=ISegmented;
 
 %% Calculate dice
     for k=1:testCompartments
-    diceErr(run/5).run(k,i) = dice(manSegGroundTruth(i).Subject(k).Seg,ISegmented(k).Seg);
+    diceErr(1).run(k,i) = dice(manSegGroundTruth(i).Subject(k).Seg,ISegmented(k).Seg);
     end
 i
 end
 
-end
+%end
