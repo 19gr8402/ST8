@@ -86,7 +86,7 @@ for compartment = 1:size(ISegmented,2)
 for i=1:450
     bold_temp = bold_reg(:,:,i);
     bold_temp(~ISegmented(compartment).Seg)=0;
-    bold_temp = bold_temp(:);
+    bold_temp = bold_temp(:); %Omdanner billedmatricen til en rækkevektor.
     bold_temp = bold_temp(bold_temp>0);
     BOLDsequence(compartment).Seg(i,:)=mean(bold_temp);%mean(bold_temp(:));
     
