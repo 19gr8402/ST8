@@ -389,8 +389,8 @@ plot(BOLDplot);
 set(a,'xlim',[0 xmaxa]);
 set(b,'xlim',[0 xmaxb]);
 xlabel(a,'Frames')
-%xlabel(b,'Baseline                                       Ischemia                                                  Reactive Hyperaemia')
+xlabel(b,'Baseline                                       Ischemia                                                  Reactive Hyperaemia')
 ylabel('Normalized SI [%]');
 xticks(b,[0 10 30 180 330 400 450]);
-xticklabels(b,{'','Baseline','30','Ischemia','330','Reactive Hyperaemia',''})
+xticklabels({'','Baseline','30','Ischemia',x = 10'})
 set(gca,'fontsize', 12);
