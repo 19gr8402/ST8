@@ -106,7 +106,7 @@ set(gca,'fontsize', 14);
 load('segmentation31TrainSubjects');
 load('manSegS_s1_r2_6comp_Ground_Truth');
 
-chosenImage = 1;
+chosenImage = 23;
 IBest = flip(Subject(chosenImage).Session(1).T2.left(:,:,2),2);
 figure; imshow(IBest,[], 'InitialMag', 'fit');
 %title('Segmentation with higest mean dice'); hold on
