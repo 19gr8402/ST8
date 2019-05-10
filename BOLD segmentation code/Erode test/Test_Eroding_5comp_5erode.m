@@ -43,6 +43,7 @@ echoPlanarImages = flip(double(Subject(i).Session(1).BOLD.left(:,:,:)),2);
 [BOLDsequenceGT]=Image_registration_and_BOLD(I,echoPlanarImages,ISegmentedGT,showMethod);
 
 
+
 % [BOLDsequence]=Image_registration_and_BOLD(I,echoPlanarImages,ISegmented,showMethod);
 % 
 % %% ER2

@@ -83,7 +83,7 @@ antalSubjects = 1;
 % end
 
 for compartment = 1:size(ISegmented,2)
-for i=5:450
+for i=1:450
     bold_temp = bold_reg(:,:,i);
     bold_temp(~ISegmented(compartment).Seg)=0;
     bold_temp = bold_temp(:); %Omdanner billedmatricen til en rækkevektor.
@@ -91,7 +91,7 @@ for i=5:450
     BOLDsequence(compartment).Seg(i,:)=mean(bold_temp);
     
 end    
-    baselineMean = mean(BOLDsequence(compartment).Seg(1:24));
+    baselineMean = mean(BOLDsequence(compartment).Seg(5:29));
     %Normaliser til procentvis i forhold til baseline på 1.
     BOLDsequence(compartment).Seg = BOLDsequence(compartment).Seg/baselineMean; %normalize( ,'range');
 end
