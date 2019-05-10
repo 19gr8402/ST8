@@ -16,8 +16,9 @@ diceData31 = diceRound(1).round(6).run(:);
 %% Boxplot
 boxplot(diceData31,CharCompartment)
 ylim([0 1]);
-title('Boxplot 31 train subjects')
+%title('Boxplot 31 train subjects')
 ylabel('Dice')
+set(gca,'fontsize', 14);
 
 
 %% Calculate and add mean
@@ -82,12 +83,13 @@ y = diceRound(1).round(6).run(6,:);
 ypos = diceRound(1).round(6).run(7,:)-diceRound(1).round(6).run(6,:);
 yneg = -(diceRound(1).round(6).run(8,:)-diceRound(1).round(6).run(6,:));
 errorbar(x,y,yneg,ypos,'x','MarkerSize',10)
-title('Errorbar 31 train subjects')
+%title('Errorbar 31 train subjects')
 xlabel('Subject')
 ylabel('Dice')
 xticks([5 10 15 20 25 30])
 ylim([0 1]);
 xlim([0 32]);
+set(gca,'fontsize', 14);
 
 %% Test for nomal distribution
 
@@ -367,18 +369,25 @@ zlabel('Frames')
 load('BOLDplotSubject_3');
 figure; %plot(BOLDplot,'b');
 % experimental data
-M(:,1) = 1:1:446;
+M(:,1) = 1:1:450;
 M(:,3) = BOLDplot;
 
 % get bounds
 xmaxa = max(M(:,1));    
 xmaxb = max(M(:,1));
+xmaxc = max(M(:,1));
 
-% axis for second axis
+% axis for second axis. B bruges til ticklabels
 b=axes('Position',[.1 .1 .8 1e-12]);
 set(b,'Units','normalized');
 set(b,'Color','none');
-set(b,'fontsize',12);
+set(b,'fontsize',14);
+set(b,'TickLength',[0 0])
+%c aksen bruges til at vise ticks
+c=axes('Position',[.1 .1 .8 1e-12]);
+set(c,'Units','normalized');
+set(c,'Color','none');
+set(c,'fontsize',14);
 
 % axis with plot
 a=axes('Position',[.1 .2 .8 .7]);
@@ -388,9 +397,12 @@ plot(BOLDplot);
 % set limits and labels
 set(a,'xlim',[0 xmaxa]);
 set(b,'xlim',[0 xmaxb]);
+set(c,'xlim',[0 xmaxb]);
 xlabel(a,'Frames')
-%xlabel(b,'Baseline                                       Ischemia                                                  Reactive Hyperaemia')
 ylabel('Normalized SI [%]');
+ylim([0.9 1.1]);
+set(gca,'fontsize', 14);
 xticks(b,[0 10 30 180 330 400 450]);
+xticks(c,[0 30 330 450]);
 xticklabels(b,{'','Baseline','30','Ischemia','330','Reactive Hyperaemia',''})
-set(gca,'fontsize', 12);
+xticklabels(c,{'','','',''})

@@ -367,18 +367,25 @@ zlabel('Frames')
 load('BOLDplotSubject_3');
 figure; %plot(BOLDplot,'b');
 % experimental data
-M(:,1) = 1:1:446;
+M(:,1) = 1:1:450;
 M(:,3) = BOLDplot;
 
 % get bounds
 xmaxa = max(M(:,1));    
 xmaxb = max(M(:,1));
+xmaxc = max(M(:,1));
 
-% axis for second axis
+% axis for second axis. B bruges til ticklabels
 b=axes('Position',[.1 .1 .8 1e-12]);
 set(b,'Units','normalized');
 set(b,'Color','none');
-set(b,'fontsize',12);
+set(b,'fontsize',14);
+set(b,'TickLength',[0 0])
+%c aksen bruges til at vise ticks
+c=axes('Position',[.1 .1 .8 1e-12]);
+set(c,'Units','normalized');
+set(c,'Color','none');
+set(c,'fontsize',14);
 
 % axis with plot
 a=axes('Position',[.1 .2 .8 .7]);
@@ -388,9 +395,12 @@ plot(BOLDplot);
 % set limits and labels
 set(a,'xlim',[0 xmaxa]);
 set(b,'xlim',[0 xmaxb]);
+set(c,'xlim',[0 xmaxb]);
 xlabel(a,'Frames')
-xlabel(b,'Baseline                                       Ischemia                                                  Reactive Hyperaemia')
 ylabel('Normalized SI [%]');
+ylim[
+set(gca,'fontsize', 14);
 xticks(b,[0 10 30 180 330 400 450]);
-xticklabels({'','Baseline','30','Ischemia',x = 10'})
-set(gca,'fontsize', 12);
+xticks(c,[0 30 330 450]);
+xticklabels(b,{'','Baseline','30','Ischemia','330','Reactive Hyperaemia',''})
+xticklabels(c,{'','','',''})
