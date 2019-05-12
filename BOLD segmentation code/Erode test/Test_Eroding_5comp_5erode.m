@@ -13,7 +13,7 @@ tic;
 showMethod = true;
 
 %% ASM segmentation
-for i=3:3
+for i=2:2
     
     
 I=flip(Subject(i).Session(1).T2.left(:,:,2),2);
@@ -41,8 +41,6 @@ figure; imshow(Segout,[]); title('GT');
 echoPlanarImages = flip(double(Subject(i).Session(1).BOLD.left(:,:,:)),2);
 
 [BOLDsequenceGT]=Image_registration_and_BOLD(I,echoPlanarImages,ISegmentedGT,showMethod);
-
-
 
 % [BOLDsequence]=Image_registration_and_BOLD(I,echoPlanarImages,ISegmented,showMethod);
 % 

@@ -13,7 +13,7 @@ options.m=2;
 % Number of search itterations
 options.nsearch=150;  %150
 % If testverbose is true all test images will be shown.
-options.testverbose=true;
+options.testverbose=false;
 % The original minimal Mahanobis distance using edge gradient (true)
 % or new minimal PCA parameters using the intensities. (false)
 options.originalsearch=false;  

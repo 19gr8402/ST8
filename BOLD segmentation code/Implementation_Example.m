@@ -29,6 +29,9 @@ echoPlanarImages = flip(Subject(i).Session(1).BOLD.left(:,:,:),2);
 
 [BOLDsequence]=Image_registration_and_BOLD(I,echoPlanarImages,ISegmented,showMethod);
 
+%Filtrering m. lavpas, cutoff= 0.05
+[BOLDsequence]= BOLD_filter(BOLDsequence, 1) %[BOLDsequence]=BOLD_filter(BOLDsequence,showPlots)
+
 figure; subplot(2,3,1); plot(BOLDsequence(1).Seg); title('Anterior: BOLD');
 subplot(2,3,2); plot(BOLDsequence(2).Seg); title('Lateral: BOLD');
 subplot(2,3,3); plot(BOLDsequence(3).Seg); title('Deep: BOLD');
