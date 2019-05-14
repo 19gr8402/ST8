@@ -21,6 +21,10 @@ for i = 1:31
         testImage=imerode(testImage,seD);
         
         erosion(i).Subject(S).Count = erosion(i).Subject(S).Count + 1;
+        
+        if erosion(i).Subject(S).Count > 100
+            break
+        end
         end
     end
 end
