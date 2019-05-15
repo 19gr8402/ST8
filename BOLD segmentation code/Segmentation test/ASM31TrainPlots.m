@@ -205,7 +205,7 @@ set(b, 'AlphaData', ASMSeg)
 % Lateral
 ASMSeg = imdilate(bwperim(Segmentation(chosenImage).Subject(2).Seg), se);
 manSeg = (manSegGroundTruth(chosenImage).Subject(2).Seg*0.15);
-color2 = cat(3, 0.8500*ones(size(IBest)), 0.3250*ones(size(IBest)), 0.0980*zeros(size(IBest)));
+color2 = cat(3, 0.8500*ones(size(IBest)), 0.3250*ones(size(IBest)), 0.0980*ones(size(IBest)));
 hold on
 c = imshow(color2);
 d = imshow(color2);
@@ -286,7 +286,7 @@ set(b, 'AlphaData', ASMSeg)
 % Lateral
 ASMSeg = imdilate(bwperim(Segmentation(chosenImage).Subject(2).Seg), se);
 manSeg = (manSegGroundTruth(chosenImage).Subject(2).Seg*0.15);
-color2 = cat(3, 0.8500*ones(size(IBest)), 0.3250*ones(size(IBest)), 0.0980*zeros(size(IBest)));
+color2 = cat(3, 0.8500*ones(size(IBest)), 0.3250*ones(size(IBest)), 0.0980*ones(size(IBest)));
 hold on
 c = imshow(color2);
 d = imshow(color2);
