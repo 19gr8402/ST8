@@ -4,8 +4,10 @@
 close all
 clearvars -except Subject manSegS_s1_r2 P
 %% read, show and initial contour:
-antalSubjects = 1;
+antalSubjects = 31;
 finalgnsErr = 0;
+diceErr = zeros(1,antalSubjects);
+diceErr2 = zeros(1,antalSubjects);
 % for finalnPoints = 121:1:139
 for n=1:antalSubjects
     % Read an image
@@ -37,7 +39,7 @@ for n=1:antalSubjects
     finalMu = 0;                     % 0.2;
     finalIterations = 300;
     finalGIterations = 100;
-    finalnPoints = 126;
+    finalnPoints = 126;             % Fundet ved optimering
     
     % General Parameters
     Options.nPoints = finalnPoints;
@@ -61,8 +63,10 @@ for n=1:antalSubjects
     %% Do da snek
     [O,J]=SnakeSJ(I,P{n},Options);
     diceErr(n) = dice(manSeg,J);
-    
-    % show results
+    [~, ~, IFatAndBoneBinary] = AllMuscleSegmentation(I,0);
+    J_adjust = logical(J.*IFatAndBoneBinary);
+    diceErr2(n) = dice(manSeg,J_adjust);
+
 %% Show results
     figure
     imshow(I)
@@ -70,7 +74,8 @@ for n=1:antalSubjects
     R   = 1;  % Value in range [0, 1]
     G   = 1;
     B   = 1;
-    RGB = cat(3, (J-J.*manSeg)+ (manSeg-J.*manSeg)+(J.*manSeg) * R, (J.*manSeg) * G, (J.*manSeg)* B);
+    % RGB = cat(3, (J-J.*manSeg)+ (manSeg-J.*manSeg)+(J.*manSeg) * R, (J.*manSeg) * G, (J.*manSeg)* B);
+    RGB = cat(3, (J-J.*J_adjust)+ (J_adjust-J.*J_adjust)+(J.*J_adjust) * R, (J.*J_adjust) * G, (J.*J_adjust)* B);
     himage = imshow(RGB(:,:,:),[]);
     himage.AlphaData = 0.1;
     plot([P{n}(:,2);P{n}(1,2)],[P{n}(:,1);P{n}(1,1)]);
@@ -78,6 +83,7 @@ for n=1:antalSubjects
     legend('Initial Contour', 'Snake Contour')
     title(sprintf('Segmentated Area Superimposed on Subject %d',n))
 end
+
 %% Show error
 x_plot = 1:n;
 y_plot = diceErr(x_plot);
@@ -92,8 +98,18 @@ ylabel('DICE')
 xlabel('Subject')
 
 gnsErr = mean(diceErr);
-if gnsErr>finalgnsErr
-    nPoints = finalnPoints;
-    finalgnsErr = gnsErr;
-end
+%% Show error adjusted 
+x_plot2 = 1:n;
+y_plot2 = diceErr2(x_plot2);
+e2 = std(y_plot2)*ones(size(x_plot2));
+
+fig2 = figure;
+errorbar(x_plot2,y_plot2,e2)
+xlim([0 n+1])
+ylim([0.75 1])
+title('DICE similarity coefficient for the segmented area with segment adjustment')
+ylabel('DICE')
+xlabel('Subject')
+
+gnsErr_adjust = mean(diceErr2);
 %end
