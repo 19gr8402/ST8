@@ -58,9 +58,9 @@ subplot(2,3,5); plot(tempGastrocnemius); xlim([0 32]);
 %% Plot effect
 
 chosenSubject = 3;
-totalSegmentedGT = Segmentation(chosenSubject).Subject(1).Seg+Segmentation(chosenSubject).Subject(2).Seg+Segmentation(chosenSubject).Subject(3).Seg+Segmentation(chosenSubject).Subject(4).Seg+Segmentation(chosenSubject).Subject(5).Seg;
-figure; title('No rosion');
-imshow(totalSegmentedGT);
+totalSegmented = Segmentation(chosenSubject).Subject(1).Seg+Segmentation(chosenSubject).Subject(2).Seg+Segmentation(chosenSubject).Subject(3).Seg+Segmentation(chosenSubject).Subject(4).Seg+Segmentation(chosenSubject).Subject(5).Seg;
+figure; title('No erosion');
+imshow(totalSegmented);
 
 seD = strel('diamond',medianAnterior);
 medianSegmented(1).Seg = imerode(Segmentation(chosenSubject).Subject(1).Seg,seD);
@@ -96,9 +96,9 @@ imshow(totalMaxSegmented);
 Image = flip(Subject(chosenSubject).Session(1).T2.left(:,:,2),2);
 figure; imshow(Image,[]);
 
-% GT
+% No
 se = strel('disk', 1);
-ASMSeg = imdilate(bwperim(totalSegmentedGT), se);
+ASMSeg = imdilate(bwperim(totalSegmented), se);
 color1 = cat(3, zeros(size(Image)), 0.4470*ones(size(Image)), 0.7410*ones(size(Image)));
 hold on
 a = imshow(color1);
@@ -245,9 +245,9 @@ subplot(2,3,5); plot(tempGastrocnemius); xlim([0 32]);
 %% Plot effect
 
 chosenSubject = 3;
-totalSegmentedGT = Segmentation(chosenSubject).Subject(1).Seg+Segmentation(chosenSubject).Subject(2).Seg+Segmentation(chosenSubject).Subject(3).Seg+Segmentation(chosenSubject).Subject(4).Seg+Segmentation(chosenSubject).Subject(5).Seg;
-figure; title('No rosion');
-imshow(totalSegmentedGT);
+totalSegmented = Segmentation(chosenSubject).Subject(1).Seg+Segmentation(chosenSubject).Subject(2).Seg+Segmentation(chosenSubject).Subject(3).Seg+Segmentation(chosenSubject).Subject(4).Seg+Segmentation(chosenSubject).Subject(5).Seg;
+figure; title('No erosion');
+imshow(totalSegmented);
 
 seD = strel('diamond',medianAnterior);
 medianSegmented(1).Seg = imerode(Segmentation(chosenSubject).Subject(1).Seg,seD);
@@ -283,14 +283,26 @@ imshow(totalMaxSegmented);
 Image = flip(Subject(chosenSubject).Session(1).T2.left(:,:,2),2);
 figure; imshow(Image,[]);
 
-% GT
+% No
 se = strel('disk', 1);
-ASMSeg = imdilate(bwperim(totalSegmentedGT), se);
+ASMSeg1 = imdilate(bwperim(Segmentation(chosenSubject).Subject(1).Seg), se);
+ASMSeg2 = imdilate(bwperim(Segmentation(chosenSubject).Subject(2).Seg), se);
+ASMSeg3 = imdilate(bwperim(Segmentation(chosenSubject).Subject(3).Seg), se);
+ASMSeg4 = imdilate(bwperim(Segmentation(chosenSubject).Subject(4).Seg), se);
+ASMSeg5 = imdilate(bwperim(Segmentation(chosenSubject).Subject(5).Seg), se);
 color1 = cat(3, zeros(size(Image)), 0.4470*ones(size(Image)), 0.7410*ones(size(Image)));
 hold on
 a = imshow(color1);
+b = imshow(color1);
+c = imshow(color1);
+d = imshow(color1);
+e = imshow(color1);
 hold off
-set(a, 'AlphaData', ASMSeg)
+set(a, 'AlphaData', ASMSeg1)
+set(b, 'AlphaData', ASMSeg2)
+set(c, 'AlphaData', ASMSeg3)
+set(d, 'AlphaData', ASMSeg4)
+set(e, 'AlphaData', ASMSeg5)
 
 % median
 se = strel('disk', 1);
@@ -364,7 +376,7 @@ set(b,'xlim',[0 xmaxb]);
 set(c,'xlim',[0 xmaxb]);
 xlabel(a,'Frames')
 ylabel('Normalized SI [%]');
-ylim([0.9 1.14]);
+ylim([0.85 1.2]);
 set(gca,'fontsize', 14);
 xticks(b,[0 10 30 180 330 400 450]);
 xticks(c,[0 30 330 450]);
