@@ -2,6 +2,7 @@ clearvars -except Subject; close all; clc;
 
 %% Load 
 load('diceErrAll_testTrainSubjects_All_rounds');
+set(0,'defaultAxesFontSize',15);
 
 %% Boksplot
 
@@ -14,11 +15,12 @@ end
 diceData31 = diceRound(1).round(6).run(:);
 
 %% Boxplot
-boxplot(diceData31,CharCompartment)
-ylim([0 1]);
+boxplot(diceData31,CharCompartment,'Widths',0.8)
+ylim([0.4 1]);
 %title('Boxplot 31 train subjects')
 ylabel('Dice')
-set(gca,'fontsize', 14);
+%set(gca,'fontsize', 14);
+xtickangle(45);
 
 
 %% Calculate and add mean
@@ -56,7 +58,7 @@ plot(x,Deep); hold on
 plot(x,Soleus); hold on
 plot(x,Gastrocnemius); hold on
 plot(x,Average);
-set(gca,'fontsize', 12);
+%set(gca,'fontsize', 12);
 legend('Anterior','Lateral','Deep posterior','Soleus','Gastrocnemius','Average','Location','southeast');
 xlabel('Number of training images');
 ylabel('Average Dice');
@@ -87,9 +89,9 @@ errorbar(x,y,yneg,ypos,'x','MarkerSize',10)
 xlabel('Subject')
 ylabel('Dice')
 xticks([5 10 15 20 25 30])
-ylim([0 1]);
+ylim([0.4 1]);
 xlim([0 32]);
-set(gca,'fontsize', 14);
+%set(gca,'fontsize', 14);
 
 %% Test for nomal distribution
 
@@ -101,7 +103,7 @@ set(gca,'fontsize', 14);
 %diceErr(6).run(:,32)= std(diceErr(6).run,0,2);
 
 %% Represent best (23) and worst (29) case.
-%load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
+load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
 %load('C:\Users\Bo\Documents\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat');
 load('segmentation31TrainSubjects');
 load('manSegS_s1_r2_6comp_Ground_Truth');
@@ -401,7 +403,7 @@ set(c,'xlim',[0 xmaxb]);
 xlabel(a,'Frames')
 ylabel('Normalized SI [%]');
 ylim([0.9 1.1]);
-set(gca,'fontsize', 14);
+%set(gca,'fontsize', 14);
 xticks(b,[0 10 30 180 330 400 450]);
 xticks(c,[0 30 330 450]);
 xticklabels(b,{'','Baseline','30','Ischemia','330','Reactive Hyperaemia',''})
