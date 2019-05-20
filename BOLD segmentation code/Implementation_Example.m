@@ -5,40 +5,96 @@ clearvars -except Subject; close all; clc;
 %% Load data
 % load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
 % load('C:\Users\mathi\Google Drive\ST8\MATLAB\Sorteret_MRI_data_SubjectsOnly.mat')
-load('manSegS_s1_r2_6comp');
+%load('manSegS_s1_r2_6comp');
+load('SegmentationACM');
+load('segmentation31TrainSubjects');
+load('manSegS_s1_r2_6comp_Ground_Truth');
 tic;
 showMethod = true;
 
 %% ASM segmentation
-for i=3:3
+for i=1:31
 I=flip(Subject(i).Session(1).T2.left(:,:,2),2);
 
-ISegmented = ASM_Segmentation_BOLD(I);
+% ISegmented = ASM_Segmentation_BOLD(I);
+% 
+% % Plot
+% Segout = mat2gray(I);
+% for k=1:5
+% Outline = bwperim(ISegmented(k).Seg);
+% Segout(Outline) = 1;
+% end
+% figure; imshow(Segout,[]);
 
-% Plot
-Segout = mat2gray(I);
-for k=1:5
-Outline = bwperim(ISegmented(k).Seg);
-Segout(Outline) = 1;
-end
-figure; imshow(Segout,[]);
+%% Fiks segmenteringer
+
+segGroundTruth = manSegGroundTruth(i).Subject;
+segACM = SegmentationACM(i).Subject;
+segASM = Segmentation(i).Subject;
 
 %% Image registration
 
 echoPlanarImages = flip(Subject(i).Session(1).BOLD.left(:,:,:),2);
 
-[BOLDsequence]=Image_registration_and_BOLD(I,echoPlanarImages,ISegmented,showMethod);
+[BOLDsequenceGT(i).Subject]=Image_registration_and_BOLD(I,echoPlanarImages,segGroundTruth,showMethod);
+[BOLDsequenceACM(i).Subject]=Image_registration_and_BOLD(I,echoPlanarImages,segACM,showMethod);
+[BOLDsequenceASM(i).Subject]=Image_registration_and_BOLD(I,echoPlanarImages,segASM,showMethod);
 
 %Filtrering m. lavpas, cutoff= 0.05
-[BOLDsequence]= BOLD_filter(BOLDsequence, 1) %[BOLDsequence]=BOLD_filter(BOLDsequence,showPlots)
+[BOLDsequenceGT(i).Subject]= BOLD_filter(BOLDsequenceGT(i).Subject, 0); %[BOLDsequence]=BOLD_filter(BOLDsequence,showPlots)
+[BOLDsequenceACM(i).Subject]= BOLD_filter(BOLDsequenceACM(i).Subject, 0);
+[BOLDsequenceASM(i).Subject]= BOLD_filter(BOLDsequenceASM(i).Subject, 0);
 
-figure; subplot(2,3,1); plot(BOLDsequence(1).Seg); title('Anterior: BOLD');
-subplot(2,3,2); plot(BOLDsequence(2).Seg); title('Lateral: BOLD');
-subplot(2,3,3); plot(BOLDsequence(3).Seg); title('Deep: BOLD');
-subplot(2,3,4); plot(BOLDsequence(4).Seg); title('Soleus: BOLD');
-subplot(2,3,5); plot(BOLDsequence(5).Seg); title('Lateral head of Gatrocnemius: BOLD');
-time = toc;
+
+% figure; subplot(2,3,1); plot(BOLDsequence(1).Seg); title('Anterior: BOLD');
+% subplot(2,3,2); plot(BOLDsequence(2).Seg); title('Lateral: BOLD');
+% subplot(2,3,3); plot(BOLDsequence(3).Seg); title('Deep: BOLD');
+% subplot(2,3,4); plot(BOLDsequence(4).Seg); title('Soleus: BOLD');
+% subplot(2,3,5); plot(BOLDsequence(5).Seg); title('Lateral head of Gatrocnemius: BOLD');
 end
+
+%% Calculate dice
+for k=1:5
+    countACM = 1;
+    countASM = 1;
+    for i=1:31
+    diceErrACM = dice(SegmentationACM(i).Subject(k).Seg,manSegGroundTruth(i).Subject(k).Seg);
+    diceErrASM = dice(Segmentation(i).Subject(k).Seg,manSegGroundTruth(i).Subject(k).Seg);
+    
+    SignalGT(k).compartment(i,:) = BOLDsequenceGT(i).Subject(k).filt;
+    
+    if diceErrACM > 0.2 %0.75
+    SignalACM(k).compartment(countACM,:) = BOLDsequenceACM(i).Subject(k).filt;
+    countACM = countACM + 1;
+    end
+    if diceErrASM > 0.2 %0.75
+    SignalASM(k).compartment(countASM,:) = BOLDsequenceASM(i).Subject(k).filt;
+    countASM = countASM + 1;
+    end
+    end
+end
+
+%% Calculate mean signals
+
+    meanAnteriorGT=mean(SignalGT(1).compartment);
+    meanLateralGT=mean(SignalGT(2).compartment);
+    meanDeepGT=mean(SignalGT(3).compartment);
+    meanSoleusGT=mean(SignalGT(4).compartment);
+    meanGastrocGT=mean(SignalGT(5).compartment);
+
+    meanAnteriorACM=mean(SignalACM(1).compartment);
+    meanLateralACM=mean(SignalACM(2).compartment);
+    meanDeepACM=mean(SignalACM(3).compartment);
+    meanSoleusACM=mean(SignalACM(4).compartment);
+    meanGastrocACM=mean(SignalACM(5).compartment);
+    
+    meanAnteriorASM=mean(SignalASM(1).compartment);
+    meanLateralASM=mean(SignalASM(2).compartment);
+    meanDeepASM=mean(SignalASM(3).compartment);
+    meanSoleusASM=mean(SignalASM(4).compartment);
+    meanGastrocASM=mean(SignalASM(5).compartment);
+
+
 %% PLOT of BOLD response with reference bar.
 
 % figure; 
@@ -84,60 +140,133 @@ end
 % xticklabels(c,{'','','',''})
 
 %% PLOT of all (filtered) BOLD response curves
-%t= (1:450)/60;
+t= (1:450)/60;
 
+% figure;
+% subplot(3,2,1)
+% plot(t,BOLDsequence(1).filt, 'LineWidth',1.5)
+% xlabel('Time [s]')
+% ylabel('Normalised SI [%]')
+% xlim([1 7.5]);
+% xticks([0 2 4 6 7.5]);
+% ylim([0.9 1.2]);
+% set(gca,'fontsize', 13);
+% title('Anterior','FontSize', 16);
+% 
+% 
+% subplot(3,2,2)
+% plot(t,BOLDsequence(2).filt, 'LineWidth',1.5)
+% xlabel('Time [s]')
+% ylabel('Normalised SI [%]')
+% xlim([1 7.5]);
+% xticks([0 2 4 6 7.5]);
+% ylim([0.9 1.2]);
+% set(gca,'fontsize', 13);
+% title('Lateral','FontSize', 16);
+% 
+% 
+% subplot(3,2,3)
+% plot(t,BOLDsequence(3).filt, 'LineWidth',1.5)
+% xlabel('Time [s]')
+% ylabel('Normalised SI [%]')
+% xlim([1 7.5]);
+% xticks([0 2 4 6 7.5]);
+% ylim([0.9 1.2]);
+% set(gca,'fontsize', 13);
+% title('Deep Posterior','FontSize', 16);
+% 
+% 
+% subplot(3,2,4)
+% plot(t,BOLDsequence(4).filt, 'LineWidth',1.5)
+% xlabel('Sec')
+% xlabel('Time [s]')
+% ylabel('Normalised SI [%]')
+% xlim([1 7.5]);
+% xticks([0 2 4 6 7.5]);
+% ylim([0.9 1.2]);
+% set(gca,'fontsize', 13);
+% title('Soleus','FontSize', 16);
+% 
+% 
+% subplot(3,2,5)
+% plot(t,BOLDsequence(5).filt, 'LineWidth',1.5)
+% xlabel('Time [s]')
+% ylabel('Normalised SI [%]')
+% xlim([1 7.5]);
+% xticks([0 2 4 6 7.5]);
+% ylim([0.9 1.2]);
+% set(gca,'fontsize', 13);
+% title('Medial Gastrocnemius','FontSize', 16);
+
+%% Plot with GT, ACM and ASM.
 figure;
 subplot(3,2,1)
-plot(t,BOLDsequence(1).filt, 'LineWidth',1.5)
-xlabel('Time [s]')
+plot(t,meanAnteriorGT, 'LineWidth',1.5); hold on
+plot(t,meanAnteriorACM, 'LineWidth',1.5); hold on
+plot(t,meanAnteriorASM,'LineWidth',1.5);
+xlabel('Time [min]')
 ylabel('Normalised SI [%]')
-xlim([1 7.5]);
+legend('Mean BOLD Ground Truth','Mean BOLD ACM','Mean BOLD ASM','location','northwest');
+xlim([0.2 7.5]);
 xticks([0 2 4 6 7.5]);
-ylim([0.9 1.2]);
+ylim([0.9 1.1]);
 set(gca,'fontsize', 13);
 title('Anterior','FontSize', 16);
 
 
 subplot(3,2,2)
-plot(t,BOLDsequence(2).filt, 'LineWidth',1.5)
-xlabel('Time [s]')
+plot(t,meanLateralGT, 'LineWidth',1.5); hold on
+plot(t,meanLateralACM, 'LineWidth',1.5); hold on
+plot(t,meanLateralASM, 'LineWidth',1.5);
+xlabel('Time [min]')
 ylabel('Normalised SI [%]')
-xlim([1 7.5]);
+%legend('Mean BOLD Ground Truth','Mean BOLD ACM','Mean BOLD ASM','location','northwest');
+xlim([0.2 7.5]);
 xticks([0 2 4 6 7.5]);
-ylim([0.9 1.2]);
+ylim([0.9 1.1]);
 set(gca,'fontsize', 13);
 title('Lateral','FontSize', 16);
 
 
 subplot(3,2,3)
-plot(t,BOLDsequence(3).filt, 'LineWidth',1.5)
-xlabel('Time [s]')
+plot(t,meanDeepGT, 'LineWidth',1.5); hold on
+plot(t,meanDeepACM, 'LineWidth',1.5); hold on
+plot(t,meanDeepASM, 'LineWidth',1.5);
+xlabel('Time [min]')
 ylabel('Normalised SI [%]')
-xlim([1 7.5]);
+%legend('Mean BOLD Ground Truth','Mean BOLD ACM','Mean BOLD ASM','location','northwest');
+xlim([0.2 7.5]);
 xticks([0 2 4 6 7.5]);
-ylim([0.9 1.2]);
+ylim([0.9 1.1]);
 set(gca,'fontsize', 13);
 title('Deep Posterior','FontSize', 16);
 
 
 subplot(3,2,4)
-plot(t,BOLDsequence(4).filt, 'LineWidth',1.5)
+plot(t,meanSoleusGT, 'LineWidth',1.5); hold on
+plot(t,meanSoleusACM, 'LineWidth',1.5); hold on
+plot(t,meanSoleusASM, 'LineWidth',1.5);
 xlabel('Sec')
-xlabel('Time [s]')
+xlabel('Time [min]')
 ylabel('Normalised SI [%]')
-xlim([1 7.5]);
+%legend('Mean BOLD Ground Truth','Mean BOLD ACM','Mean BOLD ASM','location','northwest');
+xlim([0.2 7.5]);
 xticks([0 2 4 6 7.5]);
-ylim([0.9 1.2]);
+ylim([0.9 1.1]);
 set(gca,'fontsize', 13);
 title('Soleus','FontSize', 16);
 
 
 subplot(3,2,5)
-plot(t,BOLDsequence(5).filt, 'LineWidth',1.5)
-xlabel('Time [s]')
+plot(t,meanGastrocGT, 'LineWidth',1.5); hold on
+plot(t,meanGastrocACM, 'LineWidth',1.5); hold on
+plot(t,meanGastrocASM, 'LineWidth',1.5);
+xlabel('Time [min]')
 ylabel('Normalised SI [%]')
-xlim([1 7.5]);
+%legend('Mean BOLD Ground Truth','Mean BOLD ACM','Mean BOLD ASM','location','northwest');
+xlim([0.2 7.5]);
 xticks([0 2 4 6 7.5]);
-ylim([0.9 1.2]);
+ylim([0.9 1.1]);
 set(gca,'fontsize', 13);
-title('Medial Gastrocnemius','FontSize', 16);
+title('Gastrocnemius','FontSize', 16);
+time = toc;
