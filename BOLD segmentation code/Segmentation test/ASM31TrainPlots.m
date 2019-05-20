@@ -108,6 +108,7 @@ load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
 load('segmentation31TrainSubjects');
 load('manSegS_s1_r2_6comp_Ground_Truth');
 
+%for i = 1:31
 chosenImage = 23;
 IBest = flip(Subject(chosenImage).Session(1).T2.left(:,:,2),2);
 figure; imshow(IBest,[], 'InitialMag', 'fit');
@@ -186,6 +187,7 @@ legend('Anterior','Lateral','Deep posterior','Soleus','Grastrocnemius')
 axis off %hide axis
 hold off
 
+%end
 %% ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ next plot ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
 chosenImage = 29;
 IWorst = flip(Subject(chosenImage).Session(1).T2.left(:,:,2),2);
