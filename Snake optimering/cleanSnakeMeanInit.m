@@ -5,18 +5,18 @@ close all
 clearvars -except Subject manSeg manSegGroundTruth P P1 P2 P3 P4 P5
 %% read, show and initial contour:
 set(0,'defaultAxesFontSize',15);
-antalSubjects = 31;
+antalSubjects = 1;
 finalgnsErr = 0;
 diceErr1 = zeros(1,antalSubjects);
 diceErr2 = zeros(1,antalSubjects);
 diceErr3 = zeros(1,antalSubjects);
 diceErr4 = zeros(1,antalSubjects);
 diceErr5 = zeros(1,antalSubjects);
-% P1 = cell(1,antalSubjects);
-% P2 = cell(1,antalSubjects);
-% P3 = cell(1,antalSubjects);
-% P4 = cell(1,antalSubjects);
-% P5 = cell(1,antalSubjects);
+P1 = cell(1,antalSubjects);
+P2 = cell(1,antalSubjects);
+P3 = cell(1,antalSubjects);
+P4 = cell(1,antalSubjects);
+P5 = cell(1,antalSubjects);
 J1 = cell(1,antalSubjects);
 J2 = cell(1,antalSubjects);
 J3 = cell(1,antalSubjects);
@@ -116,6 +116,7 @@ O5 = cell(1,antalSubjects);
     Options5.nPoints = 140;
  
 for n=1:antalSubjects
+    tic
     % Read an image
     I = fliplr(Subject(n).Session(1).T2.left(:,:,2));
     %I = Subject(n).Session(1).T2.right(:,:,2);
@@ -128,44 +129,44 @@ for n=1:antalSubjects
     I = im2double(I);
     figure
     imshow(I)
-%     
-%     % Place anterior shape
-%     [x,y,offsetr]=SelectPosition(I,P{1,1}(:,1),P{1,1}(:,2),0);
-%     R = [cos(offsetr) -sin(offsetr); sin(offsetr) cos(offsetr)];
-%     P1{n} = P{1,1}*R+[x,y];
+    
+    % Place anterior shape
+    [x,y,offsetr]=SelectPosition(I,P{1,1}(:,1),P{1,1}(:,2),0);
+    R = [cos(offsetr) -sin(offsetr); sin(offsetr) cos(offsetr)];
+    P1{n} = P{1,1}*R+[x,y];
     hold on
     plot([P1{n}(:,2);P1{n}(1,2)],[P1{n}(:,1);P1{n}(1,1)],'-','Color',[0    0.4470    0.7410],'LineWidth',2);
-%     
-%     % Place lateral shape
-%     [x,y,offsetr]=SelectPosition(I,P{1,2}(:,1),P{1,2}(:,2),0);
-%     R = [cos(offsetr) -sin(offsetr); sin(offsetr) cos(offsetr)];
-%     P2{n} = P{1,2}*R+[x,y];
-%     hold on
+    
+    % Place lateral shape
+    [x,y,offsetr]=SelectPosition(I,P{1,2}(:,1),P{1,2}(:,2),0);
+    R = [cos(offsetr) -sin(offsetr); sin(offsetr) cos(offsetr)];
+    P2{n} = P{1,2}*R+[x,y];
+    hold on
     plot([P2{n}(:,2);P2{n}(1,2)],[P2{n}(:,1);P2{n}(1,1)],'-','Color',[0.8500    0.3250    0.0980],'LineWidth',2);
-%     
-%     % Place deep shape
-%     [x,y,offsetr]=SelectPosition(I,P{1,3}(:,1),P{1,3}(:,2),0);
-%     R = [cos(offsetr) -sin(offsetr); sin(offsetr) cos(offsetr)];
-%     P3{n} = P{1,3}*R+[x,y];
-%     hold on
+    
+    % Place deep shape
+    [x,y,offsetr]=SelectPosition(I,P{1,3}(:,1),P{1,3}(:,2),0);
+    R = [cos(offsetr) -sin(offsetr); sin(offsetr) cos(offsetr)];
+    P3{n} = P{1,3}*R+[x,y];
+    hold on
     plot([P3{n}(:,2);P3{n}(1,2)],[P3{n}(:,1);P3{n}(1,1)],'-','Color',[0.9290    0.6940    0.1250],'LineWidth',2);
-%     
-%     % Place soleus shape
-%     [x,y,offsetr]=SelectPosition(I,P{1,4}(:,1),P{1,4}(:,2),0);
-%     R = [cos(offsetr) -sin(offsetr); sin(offsetr) cos(offsetr)];
-%     P4{n} = P{1,4}*R+[x,y];
-%     hold on
+    
+    % Place soleus shape
+    [x,y,offsetr]=SelectPosition(I,P{1,4}(:,1),P{1,4}(:,2),0);
+    R = [cos(offsetr) -sin(offsetr); sin(offsetr) cos(offsetr)];
+    P4{n} = P{1,4}*R+[x,y];
+    hold on
     plot([P4{n}(:,2);P4{n}(1,2)],[P4{n}(:,1);P4{n}(1,1)],'-','Color',[0.4660    0.6740    0.1880],'LineWidth',2);
-%     
-%     % Place Gatrocnemius shape
-%     [x,y,offsetr]=SelectPosition(I,P{1,5}(:,1),P{1,5}(:,2),0);
-%     R = [cos(offsetr) -sin(offsetr); sin(offsetr) cos(offsetr)];
-%     P5{n} = P{1,5}*R+[x,y];
-%     hold on
+    
+    % Place Gatrocnemius shape
+    [x,y,offsetr]=SelectPosition(I,P{1,5}(:,1),P{1,5}(:,2),0);
+    R = [cos(offsetr) -sin(offsetr); sin(offsetr) cos(offsetr)];
+    P5{n} = P{1,5}*R+[x,y];
+    hold on
     plot([P5{n}(:,2);P5{n}(1,2)],[P5{n}(:,1);P5{n}(1,1)],'-','Color',[0.6350    0.0780    0.1840],'LineWidth',2);
     legend('Anterior', 'Lateral','Deep','Soleus','Gastrocnemius Medialis')
     title(sprintf('Initial contour Superimposed on Subject %d',n))
-    pause(0.5)
+    % pause(0.5)
     
     %% Do da snek Anterior
     [O1{n},J1{n}]=SnakeSJ(I,P1{n},Options1);
@@ -186,6 +187,8 @@ for n=1:antalSubjects
     %% Do da snek Gastrocnemius Medialis
     [O5{n},J5{n}]=SnakeSJ(I,P5{n},Options5);
     diceErr5(n) = dice(manSegI(5).Seg,J5{n});
+    
+    toc
     
     %% Creating data struct
     SegmentationACM(n).Subject(1).Seg = J1{n};
