@@ -9,7 +9,6 @@ clearvars -except Subject; close all; clc;
 load('SegmentationACM');
 load('segmentation31TrainSubjects');
 load('manSegS_s1_r2_6comp_Ground_Truth');
-tic;
 showMethod = true;
 
 %% ASM segmentation

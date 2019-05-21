@@ -102,17 +102,24 @@ xlim([0 32]);
 
 %diceErr(6).run(:,32)= std(diceErr(6).run,0,2);
 
-%% Represent best (23) and worst (29) case.
+%% Represent best (6) and worst (15) case.
 load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
 %load('C:\Users\Bo\Documents\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat');
 load('segmentation31TrainSubjects');
 load('manSegS_s1_r2_6comp_Ground_Truth');
 
 %for i = 1:31
-chosenImage = 23;
+chosenImage = 6;
 IBest = flip(Subject(chosenImage).Session(1).T2.left(:,:,2),2);
 figure; imshow(IBest,[], 'InitialMag', 'fit');
-title('Segmentation Area Superimposed on Subject 23'); hold on
+ax = gca;
+outerpos = ax.OuterPosition;
+ti = ax.TightInset; 
+left = outerpos(1) + ti(1);
+bottom = outerpos(2) + ti(2);
+ax_width = outerpos(3) - ti(1) - ti(3);
+ax_height = outerpos(4) - ti(2) - ti(4);
+ax.Position = [left bottom ax_width ax_height];
 
 % Anterior
 se = strel('disk', 1);
@@ -189,10 +196,18 @@ hold off
 
 %end
 %% ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ next plot ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
-chosenImage = 29;
+chosenImage = 15;
 IWorst = flip(Subject(chosenImage).Session(1).T2.left(:,:,2),2);
-figure; imshow(IWorst,[]);
-title('Segmentation Area Superimposed on Subject 29');
+figure; imshow(IWorst,[], 'InitialMag', 'fit');
+ax = gca;
+outerpos = ax.OuterPosition;
+ti = ax.TightInset; 
+left = outerpos(1) + ti(1);
+bottom = outerpos(2) + ti(2);
+ax_width = outerpos(3) - ti(1) - ti(3);
+ax_height = outerpos(4) - ti(2) - ti(4);
+ax.Position = [left bottom ax_width ax_height];
+
 
 % Anterior
 se = strel('disk', 1);
@@ -267,6 +282,181 @@ legend('Anterior','Lateral','Deep posterior','Soleus','Grastrocnemius')
 axis off %hide axis
 hold off
 
+%% ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ ACM ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
+
+load('SegmentationACM');
+
+chosenImage = 6;
+IBest = flip(Subject(chosenImage).Session(1).T2.left(:,:,2),2);
+figure; imshow(IBest,[], 'InitialMag', 'fit');
+ax = gca;
+outerpos = ax.OuterPosition;
+ti = ax.TightInset; 
+left = outerpos(1) + ti(1);
+bottom = outerpos(2) + ti(2);
+ax_width = outerpos(3) - ti(1) - ti(3);
+ax_height = outerpos(4) - ti(2) - ti(4);
+ax.Position = [left bottom ax_width ax_height];
+
+% Anterior
+se = strel('disk', 1);
+ACMSeg = imdilate(bwperim(SegmentationACM(chosenImage).Subject(1).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(1).Seg*0.15);
+color1 = cat(3, zeros(size(IBest)), 0.4470*ones(size(IBest)), 0.7410*ones(size(IBest)));
+hold on
+a = imshow(color1);
+b = imshow(color1);
+hold off
+set(a, 'AlphaData', manSeg)
+set(b, 'AlphaData', ACMSeg)
+
+% Lateral
+ACMSeg = imdilate(bwperim(SegmentationACM(chosenImage).Subject(2).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(2).Seg*0.15);
+color2 = cat(3, 0.8500*ones(size(IBest)), 0.3250*ones(size(IBest)), 0.0980*ones(size(IBest)));
+hold on
+c = imshow(color2);
+d = imshow(color2);
+hold off
+set(c, 'AlphaData', manSeg)
+set(d, 'AlphaData', ACMSeg)
+
+% Deep
+ACMSeg = imdilate(bwperim(SegmentationACM(chosenImage).Subject(3).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(3).Seg*0.15);
+color3 = cat(3, 0.9290*ones(size(IBest)), 0.6940*ones(size(IBest)), 0.1250*ones(size(IBest)));
+hold on
+e = imshow(color3);
+j = imshow(color3);
+hold off
+set(e, 'AlphaData', manSeg)
+set(j, 'AlphaData', ACMSeg)
+
+% Soleus
+ACMSeg = imdilate(bwperim(SegmentationACM(chosenImage).Subject(4).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(4).Seg*0.15);
+color4 = cat(3, 0.4660*ones(size(IBest)), 0.6740*ones(size(IBest)), 0.1880*ones(size(IBest)));
+hold on
+i = imshow(color4);
+j = imshow(color4);
+hold off
+set(i, 'AlphaData', manSeg)
+set(j, 'AlphaData', ACMSeg)
+
+% Gastroc
+ACMSeg = imdilate(bwperim(SegmentationACM(chosenImage).Subject(5).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(5).Seg*0.15);
+color5 = cat(3, 0.6350*ones(size(IBest)), 0.0780*ones(size(IBest)), 0.1840*ones(size(IBest)));
+hold on
+i = imshow(color5);
+j = imshow(color5);
+hold off
+set(i, 'AlphaData', manSeg)
+set(j, 'AlphaData', ACMSeg)
+x0 = get(gca,'xlim') ;
+y0 = get(gca,'ylim') ;
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0    0.4470    0.7410])
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.8500    0.3250    0.0980])
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.9290    0.6940    0.1250])
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.4660    0.6740    0.1880])
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.6350    0.0780    0.1840])
+axis([x0 y0])
+% add the legend 
+legend('Anterior','Lateral','Deep posterior','Soleus','Grastrocnemius')
+axis off %hide axis
+hold off
+
+%% ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ New plot ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
+
+chosenImage = 15;
+IBest = flip(Subject(chosenImage).Session(1).T2.left(:,:,2),2);
+figure; imshow(IBest,[], 'InitialMag', 'fit');
+ax = gca;
+outerpos = ax.OuterPosition;
+ti = ax.TightInset; 
+left = outerpos(1) + ti(1);
+bottom = outerpos(2) + ti(2);
+ax_width = outerpos(3) - ti(1) - ti(3);
+ax_height = outerpos(4) - ti(2) - ti(4);
+ax.Position = [left bottom ax_width ax_height];
+
+% Anterior
+se = strel('disk', 1);
+ACMSeg = imdilate(bwperim(SegmentationACM(chosenImage).Subject(1).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(1).Seg*0.15);
+color1 = cat(3, zeros(size(IBest)), 0.4470*ones(size(IBest)), 0.7410*ones(size(IBest)));
+hold on
+a = imshow(color1);
+b = imshow(color1);
+hold off
+set(a, 'AlphaData', manSeg)
+set(b, 'AlphaData', ACMSeg)
+
+% Lateral
+ACMSeg = imdilate(bwperim(SegmentationACM(chosenImage).Subject(2).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(2).Seg*0.15);
+color2 = cat(3, 0.8500*ones(size(IBest)), 0.3250*ones(size(IBest)), 0.0980*ones(size(IBest)));
+hold on
+c = imshow(color2);
+d = imshow(color2);
+hold off
+set(c, 'AlphaData', manSeg)
+set(d, 'AlphaData', ACMSeg)
+
+% Deep
+ACMSeg = imdilate(bwperim(SegmentationACM(chosenImage).Subject(3).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(3).Seg*0.15);
+color3 = cat(3, 0.9290*ones(size(IBest)), 0.6940*ones(size(IBest)), 0.1250*ones(size(IBest)));
+hold on
+e = imshow(color3);
+j = imshow(color3);
+hold off
+set(e, 'AlphaData', manSeg)
+set(j, 'AlphaData', ACMSeg)
+
+% Soleus
+ACMSeg = imdilate(bwperim(SegmentationACM(chosenImage).Subject(4).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(4).Seg*0.15);
+color4 = cat(3, 0.4660*ones(size(IBest)), 0.6740*ones(size(IBest)), 0.1880*ones(size(IBest)));
+hold on
+i = imshow(color4);
+j = imshow(color4);
+hold off
+set(i, 'AlphaData', manSeg)
+set(j, 'AlphaData', ACMSeg)
+
+% Gastroc
+ACMSeg = imdilate(bwperim(SegmentationACM(chosenImage).Subject(5).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(5).Seg*0.15);
+color5 = cat(3, 0.6350*ones(size(IBest)), 0.0780*ones(size(IBest)), 0.1840*ones(size(IBest)));
+hold on
+i = imshow(color5);
+j = imshow(color5);
+hold off
+set(i, 'AlphaData', manSeg)
+set(j, 'AlphaData', ACMSeg)
+x0 = get(gca,'xlim') ;
+y0 = get(gca,'ylim') ;
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0    0.4470    0.7410])
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.8500    0.3250    0.0980])
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.9290    0.6940    0.1250])
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.4660    0.6740    0.1880])
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.6350    0.0780    0.1840])
+axis([x0 y0])
+% add the legend 
+legend('Anterior','Lateral','Deep posterior','Soleus','Grastrocnemius')
+axis off %hide axis
+hold off
 
 %% ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ New plot ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
 load('BOLD_reg_Subject_23');

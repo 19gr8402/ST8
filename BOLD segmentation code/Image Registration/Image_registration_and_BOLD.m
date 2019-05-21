@@ -31,7 +31,7 @@ metric.NumberOfHistogramBins = 32; %Default = 50
 
 
 %% REGISTRATION - Full BOLD Sequence
-antalSubjects = 1;
+%antalSubjects = 1;
 %antalSubjects = input('Number of Subjects:');
 
     fixed = I;
