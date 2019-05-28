@@ -2,7 +2,8 @@ clearvars -except Subject; close all; clc;
 
 %% Load 
 load('diceErrAll_testTrainSubjects_All_rounds');
-set(0,'defaultAxesFontSize',15);
+font = 24;
+set(0,'defaultAxesFontSize',font);
 
 %% Boksplot
 
@@ -15,13 +16,23 @@ end
 diceData31 = diceRound(1).round(6).run(:);
 
 %% Boxplot
-boxplot(diceData31,CharCompartment,'Widths',0.8)
+h = boxplot(diceData31,CharCompartment,'Widths',0.8);
+set(h,'LineWidth',1.5)
 ylim([0.4 1]);
 %title('Boxplot 31 train subjects')
-ylabel('Dice')
+ylabel('DSC')
 %set(gca,'fontsize', 14);
 xtickangle(45);
 
+% % % ACM
+% load('diceDataACM');
+% h = boxplot(diceData31,CharCompartment,'Widths',0.8);
+% set(h,'LineWidth',1.5)
+% ylim([0.4 1]);
+% %title('Boxplot 31 train subjects')
+% ylabel('DSC')
+% %set(gca,'fontsize', 14);
+% xtickangle(45);
 
 %% Calculate and add mean
 for round=1:5
@@ -61,7 +72,7 @@ plot(x,Average);
 %set(gca,'fontsize', 12);
 legend('Anterior','Lateral','Deep posterior','Soleus','Gastrocnemius','Average','Location','southeast');
 xlabel('Number of training images');
-ylabel('Average Dice');
+ylabel('Average DSC');
 xlim([0 35]);
 ylim([0 1]);
 xticks([5 10 15 20 25 30])
@@ -84,10 +95,11 @@ x = 1:1:31;
 y = diceRound(1).round(6).run(6,:);
 ypos = diceRound(1).round(6).run(7,:)-diceRound(1).round(6).run(6,:);
 yneg = -(diceRound(1).round(6).run(8,:)-diceRound(1).round(6).run(6,:));
-errorbar(x,y,yneg,ypos,'x','MarkerSize',10)
+h = errorbar(x,y,yneg,ypos,'x','MarkerSize',10);
+set(h,'LineWidth',1.5)
 %title('Errorbar 31 train subjects')
 xlabel('Subject')
-ylabel('Dice')
+ylabel('DSC')
 xticks([5 10 15 20 25 30])
 ylim([0.4 1]);
 xlim([0 32]);
@@ -103,7 +115,7 @@ xlim([0 32]);
 %diceErr(6).run(:,32)= std(diceErr(6).run,0,2);
 
 %% Represent best (6) and worst (15) case.
-load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
+%load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
 %load('C:\Users\Bo\Documents\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat');
 load('segmentation31TrainSubjects');
 load('manSegS_s1_r2_6comp_Ground_Truth');
@@ -560,11 +572,11 @@ zlabel('Frames')
 
 %% ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ BOLD plot ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
 
-load('BOLDplotSubject_3');
+load('BOLDsequence_GT_ACM_ASM');
 figure; %plot(BOLDplot,'b');
 % experimental data
 M(:,1) = 1:1:450;
-M(:,3) = BOLDplot;
+M(:,3) = BOLDsequenceGT(3).Subject(1).filt; %manSegGroundTruth
 
 % get bounds
 xmaxa = max(M(:,1));    
@@ -572,21 +584,21 @@ xmaxb = max(M(:,1));
 xmaxc = max(M(:,1));
 
 % axis for second axis. B bruges til ticklabels
-b=axes('Position',[.1 .1 .8 1e-12]);
+b=axes('Position',[.1 .07 .8 1e-12]);
 set(b,'Units','normalized');
 set(b,'Color','none');
-set(b,'fontsize',14);
+set(b,'fontsize',font);
 set(b,'TickLength',[0 0])
 %c aksen bruges til at vise ticks
-c=axes('Position',[.1 .1 .8 1e-12]);
+c=axes('Position',[.1 .07 .8 1e-12]);
 set(c,'Units','normalized');
 set(c,'Color','none');
-set(c,'fontsize',14);
+set(c,'fontsize',font);
 
 % axis with plot
 a=axes('Position',[.1 .2 .8 .7]);
 set(a,'Units','normalized');
-plot(BOLDplot);
+plot(BOLDsequenceGT(3).Subject(1).filt,'Linewidth',2);
 
 % set limits and labels
 set(a,'xlim',[0 xmaxa]);
@@ -595,8 +607,95 @@ set(c,'xlim',[0 xmaxb]);
 xlabel(a,'Frames')
 ylabel('Normalized SI [%]');
 ylim([0.9 1.1]);
-%set(gca,'fontsize', 14);
+set(gca,'fontsize', font);
 xticks(b,[0 10 30 180 330 400 450]);
 xticks(c,[0 30 330 450]);
-xticklabels(b,{'','Baseline','30','Ischemia','330','Reactive Hyperaemia',''})
+xticklabels(b,{'','Baseline       ','30','Ischemia','330','Reactive Hyperaemia',''})
 xticklabels(c,{'','','',''})
+
+
+%% ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ New plot ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
+chosenImage = 3;
+IBest = flip(Subject(chosenImage).Session(1).T2.left(:,:,2),2);
+figure; imshow(IBest,[], 'InitialMag', 'fit');
+ax = gca;
+outerpos = ax.OuterPosition;
+ti = ax.TightInset; 
+left = outerpos(1) + ti(1);
+bottom = outerpos(2) + ti(2);
+ax_width = outerpos(3) - ti(1) - ti(3);
+ax_height = outerpos(4) - ti(2) - ti(4);
+ax.Position = [left bottom ax_width ax_height];
+
+% Anterior
+se = strel('disk', 1);
+%ASMSeg = imdilate(bwperim(Segmentation(chosenImage).Subject(1).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(1).Seg*0.25);
+color1 = cat(3, zeros(size(IBest)), 0.4470*ones(size(IBest)), 0.7410*ones(size(IBest)));
+hold on
+a = imshow(color1);
+%b = imshow(color1);
+hold off
+set(a, 'AlphaData', manSeg)
+%set(b, 'AlphaData', ASMSeg)
+
+% Lateral
+%ASMSeg = imdilate(bwperim(Segmentation(chosenImage).Subject(2).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(2).Seg*0.25);
+color2 = cat(3, 0.8500*ones(size(IBest)), 0.3250*ones(size(IBest)), 0.0980*ones(size(IBest)));
+hold on
+c = imshow(color2);
+%d = imshow(color2);
+hold off
+set(c, 'AlphaData', manSeg)
+%set(d, 'AlphaData', ASMSeg)
+
+% Deep
+%ASMSeg = imdilate(bwperim(Segmentation(chosenImage).Subject(3).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(3).Seg*0.25);
+color3 = cat(3, 0.9290*ones(size(IBest)), 0.6940*ones(size(IBest)), 0.1250*ones(size(IBest)));
+hold on
+e = imshow(color3);
+%j = imshow(color3);
+hold off
+set(e, 'AlphaData', manSeg)
+%set(j, 'AlphaData', ASMSeg)
+
+% Soleus
+%ASMSeg = imdilate(bwperim(Segmentation(chosenImage).Subject(4).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(4).Seg*0.25);
+color4 = cat(3, 0.4660*ones(size(IBest)), 0.6740*ones(size(IBest)), 0.1880*ones(size(IBest)));
+hold on
+i = imshow(color4);
+%j = imshow(color4);
+hold off
+set(i, 'AlphaData', manSeg)
+%set(j, 'AlphaData', ASMSeg)
+
+% Gastroc
+%ASMSeg = imdilate(bwperim(Segmentation(chosenImage).Subject(5).Seg), se);
+manSeg = (manSegGroundTruth(chosenImage).Subject(5).Seg*0.25);
+color5 = cat(3, 0.6350*ones(size(IBest)), 0.0780*ones(size(IBest)), 0.1840*ones(size(IBest)));
+hold on
+i = imshow(color5);
+%j = imshow(color5);
+hold off
+set(i, 'AlphaData', manSeg)
+%set(j, 'AlphaData', ASMSeg)
+x0 = get(gca,'xlim') ;
+y0 = get(gca,'ylim') ;
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0    0.4470    0.7410])
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.8500    0.3250    0.0980])
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.9290    0.6940    0.1250])
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.4660    0.6740    0.1880])
+hold on
+scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.6350    0.0780    0.1840])
+axis([x0 y0])
+% add the legend 
+legend('Anterior','Lateral','Deep posterior','Soleus','Grastrocnemius')
+axis off %hide axis
+hold off

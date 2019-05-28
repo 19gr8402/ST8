@@ -1,10 +1,11 @@
 clearvars -except Subject; close all; clc;
-
+font = 26;
+set(0,'defaultAxesFontSize',font);
 
 %% Load data
 load('D:\Git\BOLD segmentation code\Data\segmentation31TrainSubjects.mat')
 load('D:\Git\BOLD segmentation code\Data\manSegS_s1_r2_6comp_Ground_Truth.mat')
-load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
+%load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
 
 for i = 1:31
     for S = 1:5
@@ -94,7 +95,15 @@ imshow(totalMaxSegmented);
 
 %% Plot image with erosions
 Image = flip(Subject(chosenSubject).Session(1).T2.left(:,:,2),2);
-figure; imshow(Image,[]);
+figure; imshow(Image,[], 'InitialMag', 'fit');
+ax = gca;
+outerpos = ax.OuterPosition;
+ti = ax.TightInset; 
+left = outerpos(1) + ti(1);
+bottom = outerpos(2) + ti(2);
+ax_width = outerpos(3) - ti(1) - ti(3);
+ax_height = outerpos(4) - ti(2) - ti(4);
+ax.Position = [left bottom ax_width ax_height];
 
 % No
 se = strel('disk', 1);
@@ -133,7 +142,7 @@ hold on
 scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.4660    0.6740    0.1880])
 axis([x0 y0])
 % add the legend 
-legend('ASM segment: no erosion','ASM segment: median erosion','ASM segment: max erosion')
+legend('ASM segment: No erosion','ASM segment: Median erosion','ASM segment: Max erosion')
 axis off %hide axis
 hold off
 
@@ -155,21 +164,21 @@ xmaxb = max(M(:,1));
 xmaxc = max(M(:,1));
 
 % axis for second axis. B bruges til ticklabels
-b=axes('Position',[.1 .1 .8 1e-12]);
+b=axes('Position',[.1 .07 .8 1e-12]);
 set(b,'Units','normalized');
 set(b,'Color','none');
-set(b,'fontsize',14);
+set(b,'fontsize',font);
 set(b,'TickLength',[0 0])
 %c aksen bruges til at vise ticks
-c=axes('Position',[.1 .1 .8 1e-12]);
+c=axes('Position',[.1 .07 .8 1e-12]);
 set(c,'Units','normalized');
 set(c,'Color','none');
-set(c,'fontsize',14);
+set(c,'fontsize',font);
 
 % axis with plot
 a=axes('Position',[.1 .2 .8 .7]);
 set(a,'Units','normalized');
-plot(BOLDsequenceGT(4).Seg); hold on; plot(medianBOLDsequence(4).Seg); hold on; plot(maxBOLDsequence(4).Seg,'color',[0.4660 0.6740 0.1880]);
+plot(BOLDsequenceGT(4).Seg,'LineWidth',1.5); hold on; plot(medianBOLDsequence(4).Seg,'LineWidth',1.5); hold on; plot(maxBOLDsequence(4).Seg,'color',[0.4660 0.6740 0.1880],'LineWidth',1.5);
 
 % set limits and labels
 set(a,'xlim',[0 xmaxa]);
@@ -178,12 +187,12 @@ set(c,'xlim',[0 xmaxb]);
 xlabel(a,'Frames')
 ylabel('Normalized SI [%]');
 ylim([0.9 1.14]);
-set(gca,'fontsize', 14);
+set(gca,'fontsize', font);
 xticks(b,[0 10 30 180 330 400 450]);
 xticks(c,[0 30 330 450]);
-xticklabels(b,{'','Baseline','30','Ischemia','330','Reactive Hyperaemia',''})
+xticklabels(b,{'','Baseline       ','30','Ischemia','330','Reactive Hyperaemia',''})
 xticklabels(c,{'','','',''})
-legend('ASM segment: no erosion','ASM segment: median erosion','ASM segment: max erosion','Location','northwest')
+legend('ASM segment: No erosion','ASM segment: Median erosion','ASM segment: Max erosion','Location','northwest')
 
 %% ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ ACM ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
 
@@ -281,7 +290,15 @@ imshow(totalMaxSegmented);
 
 %% Plot image with erosions
 Image = flip(Subject(chosenSubject).Session(1).T2.left(:,:,2),2);
-figure; imshow(Image,[]);
+figure; imshow(Image,[], 'InitialMag', 'fit');
+ax = gca;
+outerpos = ax.OuterPosition;
+ti = ax.TightInset; 
+left = outerpos(1) + ti(1);
+bottom = outerpos(2) + ti(2);
+ax_width = outerpos(3) - ti(1) - ti(3);
+ax_height = outerpos(4) - ti(2) - ti(4);
+ax.Position = [left bottom ax_width ax_height];
 
 % No
 se = strel('disk', 1);
@@ -332,7 +349,7 @@ hold on
 scatter(0,0,200,'s','MarkerEdgeColor','k','MarkerFaceColor',[0.4660    0.6740    0.1880])
 axis([x0 y0])
 % add the legend 
-legend('ACM segment: no erosion','ACM segment: median erosion','ACM segment: max erosion')
+legend('ACM segment: No erosion','ACM segment: Median erosion','ACM segment: Max erosion')
 axis off %hide axis
 hold off
 
@@ -354,21 +371,21 @@ xmaxb = max(M(:,1));
 xmaxc = max(M(:,1));
 
 % axis for second axis. B bruges til ticklabels
-b=axes('Position',[.1 .1 .8 1e-12]);
+b=axes('Position',[.1 .07 .8 1e-12]);
 set(b,'Units','normalized');
 set(b,'Color','none');
-set(b,'fontsize',14);
+set(b,'fontsize',font);
 set(b,'TickLength',[0 0])
 %c aksen bruges til at vise ticks
-c=axes('Position',[.1 .1 .8 1e-12]);
+c=axes('Position',[.1 .07 .8 1e-12]);
 set(c,'Units','normalized');
 set(c,'Color','none');
-set(c,'fontsize',14);
+set(c,'fontsize',font);
 
 % axis with plot
 a=axes('Position',[.1 .2 .8 .7]);
 set(a,'Units','normalized');
-plot(BOLDsequenceGT(4).Seg); hold on; plot(medianBOLDsequence(4).Seg); hold on; plot(maxBOLDsequence(4).Seg,'color',[0.4660 0.6740 0.1880]);
+plot(BOLDsequenceGT(4).Seg,'LineWidth',1.5); hold on; plot(medianBOLDsequence(4).Seg,'LineWidth',1.5); hold on; plot(maxBOLDsequence(4).Seg,'color',[0.4660 0.6740 0.1880],'LineWidth',1.5);
 
 % set limits and labels
 set(a,'xlim',[0 xmaxa]);
@@ -377,9 +394,9 @@ set(c,'xlim',[0 xmaxb]);
 xlabel(a,'Frames')
 ylabel('Normalized SI [%]');
 ylim([0.85 1.2]);
-set(gca,'fontsize', 14);
+set(gca,'fontsize', font);
 xticks(b,[0 10 30 180 330 400 450]);
 xticks(c,[0 30 330 450]);
-xticklabels(b,{'','Baseline','30','Ischemia','330','Reactive Hyperaemia',''})
+xticklabels(b,{'','Baseline       ','30','Ischemia','330','Reactive Hyperaemia',''})
 xticklabels(c,{'','','',''})
-legend('ACM segment: no erosion','ACM segment: median erosion','ACM segment: max erosion','Location','northwest')
+legend('ACM segment: No erosion','ACM segment: Median erosion','ACM segment: Max erosion','Location','northwest')

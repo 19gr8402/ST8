@@ -1,6 +1,7 @@
 % Example of implementation
 
 clearvars -except Subject; close all; clc;
+set(0,'defaultAxesFontSize',16);
 
 %% Load data
 % load('D:\Noter\Project\Sorteret_MRI_data_SubjectsOnly.mat')
@@ -200,65 +201,59 @@ t= (1:450)/60;
 % title('Medial Gastrocnemius','FontSize', 16);
 
 %% Plot with GT, ACM and ASM.
+LineWidth = 1;
 figure;
-subplot(3,2,1)
-plot(t,meanAnteriorGT, 'LineWidth',1.5); hold on
-plot(t,meanAnteriorACM, 'LineWidth',1.5); hold on
-plot(t,meanAnteriorASM,'LineWidth',1.5);
+subplot(2,3,1)
+plot(t,meanAnteriorGT, 'LineWidth',LineWidth); hold on
+plot(t,meanAnteriorACM, 'LineWidth',LineWidth); hold on
+plot(t,meanAnteriorASM,'LineWidth',LineWidth);
 a=line([0.5 0.5], [0 2],'Color','k', 'LineStyle', '--');
 b=line([5.5 5.5], [0 2],'Color','k', 'LineStyle', '--');
 a.Color(4) = 0.25;
 b.Color(4) = 0.25;
-xlabel('Time [min]')
 ylabel('Normalised SI [%]')
-legend('Mean BOLD Ground Truth','Mean BOLD ACM','Mean BOLD ASM','location','northwest');
+legend('Mean BOLD validation','Mean BOLD ACM','Mean BOLD ASM','location','northwest');
 xlim([0.2 7.5]);
 xticks([0 2 4 6 7.5]);
 ylim([0.9 1.1]);
-set(gca,'fontsize', 13);
 title('Anterior','FontSize', 16);
 
 
-subplot(3,2,2)
-plot(t,meanLateralGT, 'LineWidth',1.5); hold on
-plot(t,meanLateralACM, 'LineWidth',1.5); hold on
-plot(t,meanLateralASM, 'LineWidth',1.5);
+subplot(2,3,2)
+plot(t,meanLateralGT, 'LineWidth',LineWidth); hold on
+plot(t,meanLateralACM, 'LineWidth',LineWidth); hold on
+plot(t,meanLateralASM, 'LineWidth',LineWidth);
 c=line([0.5 0.5], [0 2],'Color','k', 'LineStyle', '--');
 d=line([5.5 5.5], [0 2],'Color','k', 'LineStyle', '--');
 c.Color(4) = 0.25;
 d.Color(4) = 0.25;
-xlabel('Time [min]')
-ylabel('Normalised SI [%]')
 %legend('Mean BOLD Ground Truth','Mean BOLD ACM','Mean BOLD ASM','location','northwest');
 xlim([0.2 7.5]);
 xticks([0 2 4 6 7.5]);
 ylim([0.9 1.1]);
-set(gca,'fontsize', 13);
 title('Lateral','FontSize', 16);
 
 
-subplot(3,2,3)
-plot(t,meanDeepGT, 'LineWidth',1.5); hold on
-plot(t,meanDeepACM, 'LineWidth',1.5); hold on
-plot(t,meanDeepASM, 'LineWidth',1.5);
+subplot(2,3,3)
+plot(t,meanDeepGT, 'LineWidth',LineWidth); hold on
+plot(t,meanDeepACM, 'LineWidth',LineWidth); hold on
+plot(t,meanDeepASM, 'LineWidth',LineWidth);
 e=line([0.5 0.5], [0 2],'Color','k', 'LineStyle', '--');
 f=line([5.5 5.5], [0 2],'Color','k', 'LineStyle', '--');
 e.Color(4) = 0.25;
 f.Color(4) = 0.25;
 xlabel('Time [min]')
-ylabel('Normalised SI [%]')
 %legend('Mean BOLD Ground Truth','Mean BOLD ACM','Mean BOLD ASM','location','northwest');
 xlim([0.2 7.5]);
 xticks([0 2 4 6 7.5]);
 ylim([0.9 1.1]);
-set(gca,'fontsize', 13);
-title('Deep Posterior','FontSize', 16);
+title('Deep posterior','FontSize', 16);
 
 
-subplot(3,2,4)
-plot(t,meanSoleusGT, 'LineWidth',1.5); hold on
-plot(t,meanSoleusACM, 'LineWidth',1.5); hold on
-plot(t,meanSoleusASM, 'LineWidth',1.5);
+subplot(2,3,4)
+plot(t,meanSoleusGT, 'LineWidth',LineWidth); hold on
+plot(t,meanSoleusACM, 'LineWidth',LineWidth); hold on
+plot(t,meanSoleusASM, 'LineWidth',LineWidth);
 g=line([0.5 0.5], [0 2],'Color','k', 'LineStyle', '--');
 h=line([5.5 5.5], [0 2],'Color','k', 'LineStyle', '--');
 g.Color(4) = 0.25;
@@ -270,25 +265,21 @@ ylabel('Normalised SI [%]')
 xlim([0.2 7.5]);
 xticks([0 2 4 6 7.5]);
 ylim([0.9 1.1]);
-set(gca,'fontsize', 13);
 title('Soleus','FontSize', 16);
 
 
-subplot(3,2,5)
-plot(t,meanGastrocGT, 'LineWidth',1.5); hold on
-plot(t,meanGastrocACM, 'LineWidth',1.5); hold on
-plot(t,meanGastrocASM, 'LineWidth',1.5);
+subplot(2,3,5)
+plot(t,meanGastrocGT, 'LineWidth',LineWidth); hold on
+plot(t,meanGastrocACM, 'LineWidth',LineWidth); hold on
+plot(t,meanGastrocASM, 'LineWidth',LineWidth);
 i=line([0.5 0.5], [0 2],'Color','k', 'LineStyle', '--');
 j=line([5.5 5.5], [0 2],'Color','k', 'LineStyle', '--');
 i.Color(4) = 0.25;
 j.Color(4) = 0.25;
 xlabel('Time [min]')
-ylabel('Normalised SI [%]')
 %legend('Mean BOLD Ground Truth','Mean BOLD ACM','Mean BOLD ASM','location','northwest');
 xlim([0.2 7.5]);
 xticks([0 2 4 6 7.5]);
 ylim([0.9 1.1]);
-set(gca,'fontsize', 13);
 title('Gastrocnemius','FontSize', 16);
 
-time = toc;
